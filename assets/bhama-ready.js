@@ -66,6 +66,29 @@
     });
   }
 
+  function initHeader() {
+    document.querySelectorAll("[data-bhama-menu-toggle]").forEach(function (toggle) {
+      var menu = document.getElementById(toggle.getAttribute("aria-controls"));
+      if (!menu) return;
+
+      function setMenuOpen(isOpen) {
+        toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+        toggle.setAttribute("aria-label", isOpen ? "Close menu" : "Open menu");
+        toggle.closest(".bhama-nav").classList.toggle("is-menu-open", isOpen);
+      }
+
+      toggle.addEventListener("click", function () {
+        setMenuOpen(toggle.getAttribute("aria-expanded") !== "true");
+      });
+
+      menu.querySelectorAll("a").forEach(function (link) {
+        link.addEventListener("click", function () {
+          setMenuOpen(false);
+        });
+      });
+    });
+  }
+
   function initProduct() {
     var root = document.querySelector("[data-bhama-product]");
     var jsonNode = root && root.querySelector("[data-bhama-product-json], [data-bhama-variants]");
@@ -287,6 +310,7 @@
   }
 
   document.addEventListener("DOMContentLoaded", function () {
+    initHeader();
     initReels();
     initProduct();
   });

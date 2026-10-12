@@ -36,10 +36,16 @@
               {% else %}
                 <img src="{{ 'bhama-product-woven-vines.jpg' | asset_url }}" alt="{{ product.title }}" width="700" height="933">
               {% endif %}
+              <span class="bhama-card-quick-view">Quick view</span>
             </div>
             <div class="bhama-card-info">
               <h3>{{ product.title }}</h3>
-              <span class="bhama-price">{{ product.price | money }}</span>
+              <div class="bhama-product-meta">
+                <span class="bhama-price">{{ product.price | money }}</span>
+                {% if product.compare_at_price_max > product.price %}
+                  <span class="bhama-old-price">{{ product.compare_at_price_max | money }}</span>
+                {% endif %}
+              </div>
             </div>
           </a>
         {% endfor %}
@@ -47,15 +53,20 @@
         {% assign fallback_titles = 'Woven Vines Modal Chanderi Set|Banarasi Soft Silk Saree|Ishani Jamdani Weaving Saree|Premium Soft Silk Zari Weaves Saree' | split: '|' %}
         {% assign fallback_images = 'bhama-product-woven-vines.jpg|bhama-product-banarasi.jpg|bhama-product-ishani.jpg|bhama-product-zari.jpg' | split: '|' %}
         {% assign fallback_prices = 'Rs. 2,499|Rs. 4,899|Rs. 3,600|Rs. 4,900' | split: '|' %}
+        {% assign fallback_old_prices = 'Rs. 3,199|Rs. 5,999|Rs. 4,500|Rs. 6,200' | split: '|' %}
         {% for title in fallback_titles %}
           <a class="bhama-card" href="{{ routes.collections_url }}">
             <div class="bhama-card-media">
               <span class="bhama-badge">New</span>
               <img src="{{ fallback_images[forloop.index0] | asset_url }}" alt="{{ title }}" width="700" height="933">
+              <span class="bhama-card-quick-view">Quick view</span>
             </div>
             <div class="bhama-card-info">
               <h3>{{ title }}</h3>
-              <span class="bhama-price">{{ fallback_prices[forloop.index0] }}</span>
+              <div class="bhama-product-meta">
+                <span class="bhama-price">{{ fallback_prices[forloop.index0] }}</span>
+                <span class="bhama-old-price">{{ fallback_old_prices[forloop.index0] }}</span>
+              </div>
             </div>
           </a>
         {% endfor %}
@@ -73,9 +84,9 @@
       <a class="bhama-btn bhama-btn-outline" style="color:#fff;border-color:rgba(255,255,255,.5);margin-top:22px;" href="{{ routes.all_products_collection_url }}">Explore The Edit →</a>
     </div>
     <div class="bhama-edit-rail">
-      {% assign edit_images = 'bhama-product-woven-vines.jpg|bhama-product-banarasi.jpg|bhama-product-ishani.jpg|bhama-product-zari.jpg|bhama-product-kurthi.jpg|bhama-product-meena.jpg' | split: '|' %}
-      {% assign edit_titles = 'Woven Vines Modal Chanderi Set|Banarasi Soft Silk Saree|Ishani Jamdani Weaving Saree|Premium Soft Silk Zari Weaves Saree|Chettinad Cotton Vel Kurthi|Meena Weaving Birds Saree' | split: '|' %}
-      {% assign edit_prices = 'Rs. 2,499|Rs. 4,899|Rs. 3,600|Rs. 4,900|Rs. 1,499|Rs. 4,299' | split: '|' %}
+      {% assign edit_images = 'bhama-product-woven-vines.jpg|bhama-product-banarasi.jpg|bhama-product-ishani.jpg|bhama-product-zari.jpg|bhama-product-kurthi.jpg' | split: '|' %}
+      {% assign edit_titles = 'Woven Vines Modal Chanderi Set|Banarasi Soft Silk Saree|Ishani Jamdani Weaving Saree|Premium Soft Silk Zari Weaves Saree|Chettinad Cotton Vel Kurthi' | split: '|' %}
+      {% assign edit_prices = 'Rs. 2,499|Rs. 4,899|Rs. 3,600|Rs. 4,900|Rs. 1,499' | split: '|' %}
       {% for image in edit_images %}
         <a class="bhama-edit-rail-card" href="{{ routes.all_products_collection_url }}">
           <span class="bhama-badge bhama-badge-gold">Edit</span>
@@ -185,6 +196,7 @@
           <div class="bhama-card-media">
             <span class="bhama-badge bhama-badge-last-few">Last Few</span>
             <img src="{{ image | asset_url }}" alt="{{ last_few_titles[forloop.index0] }}" width="700" height="933" loading="lazy">
+            <span class="bhama-card-quick-view">Quick view</span>
           </div>
           <div class="bhama-card-info">
             <h3>{{ last_few_titles[forloop.index0] }}</h3>

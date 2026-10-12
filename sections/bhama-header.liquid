@@ -1,5 +1,5 @@
 <div class="bhama-announcement">
-  {{ section.settings.announcement }}
+  <span><i class="bi bi-gem" aria-hidden="true"></i> {{ section.settings.announcement }} &nbsp;|&nbsp; <a href="{{ routes.all_products_collection_url }}">Shop now <span aria-hidden="true">→</span></a></span>
 </div>
 
 <header class="bhama-header">
@@ -12,22 +12,30 @@
       {% endif %}
     </a>
 
-    <ul class="bhama-menu">
+    <ul class="bhama-menu" id="BhamaMenu-{{ section.id }}">
       {% if section.settings.menu != blank %}
         {% for link in section.settings.menu.links %}
           <li><a href="{{ link.url }}">{{ link.title }}</a></li>
         {% endfor %}
       {% else %}
         <li><a href="{{ routes.collections_url }}">New In</a></li>
-        <li><a href="{{ routes.collections_url }}">Sarees</a></li>
-        <li><a href="{{ routes.collections_url }}">Suit Sets</a></li>
+        <li><a href="{{ routes.collections_url }}/contemporary">Contemporary</a></li>
+        <li><a href="{{ routes.collections_url }}/traditional">Traditional</a></li>
+        <li><a href="{{ routes.collections_url }}/accessories">Accessories</a></li>
         <li><a href="{{ routes.collections_url }}">The Bhama Edit</a></li>
       {% endif %}
     </ul>
 
     <div class="bhama-actions">
-      <a href="{{ routes.search_url }}">Search</a>
-      <a href="{{ routes.cart_url }}">Bag <span class="bhama-cart-count" data-bhama-cart-count>{{ cart.item_count }}</span></a>
+      <form class="bhama-header-search" action="{{ routes.search_url }}" method="get" role="search">
+        <button class="bhama-search-submit" type="submit" aria-label="Search"><i class="bi bi-search" aria-hidden="true"></i></button>
+        <input type="search" name="q" placeholder="Search kurtas, dresses, sarees" aria-label="Search products">
+      </form>
+      <a class="bhama-header-icon bhama-wishlist-link" href="/pages/wishlist" aria-label="Wishlist"><i class="bi bi-heart" aria-hidden="true"></i></a>
+      <a class="bhama-header-icon" href="{{ routes.cart_url }}" aria-label="Shopping bag"><i class="bi bi-bag" aria-hidden="true"></i><span class="bhama-cart-count" data-bhama-cart-count>{{ cart.item_count }}</span></a>
+      <button class="bhama-menu-toggle" type="button" data-bhama-menu-toggle aria-controls="BhamaMenu-{{ section.id }}" aria-expanded="false" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </div>
 </header>
@@ -40,7 +48,7 @@
       "type": "text",
       "id": "announcement",
       "label": "Announcement",
-      "default": "New drops, freshly curated | Free shipping on selected products"
+      "default": "New drops, freshly curated"
     },
     {
       "type": "image_picker",
