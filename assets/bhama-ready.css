@@ -11,7 +11,14 @@
   --bhama-gold-soft: #d7bc86;
   --bhama-white: #ffffff;
   --bhama-shadow: 0 18px 42px rgba(20, 16, 12, .12);
-  --bhama-font: "Manrope", "Jost", Arial, sans-serif;
+  --bhama-shadow-soft: 0 10px 24px rgba(20, 16, 12, .08);
+  --bhama-font: "Manrope", Arial, sans-serif;
+  --bhama-font-display: "Cormorant Garamond", Georgia, serif;
+}
+
+::selection {
+  color: #fff;
+  background: var(--bhama-red);
 }
 
 body.template-index,
@@ -135,14 +142,15 @@ body.template-collection {
 .bhama-hero h1,
 .bhama-heading h2 {
   margin: 0;
-  font-family: "Jost", Arial, sans-serif;
-  font-weight: 900;
+  font-family: var(--bhama-font-display);
+  font-weight: 600;
   letter-spacing: 0;
-  line-height: 1.05;
+  line-height: 1.04;
 }
 
 .bhama-hero h1 {
-  font-size: clamp(42px, 7vw, 86px);
+  font-size: clamp(46px, 7.4vw, 92px);
+  font-weight: 700;
 }
 
 .bhama-hero p {
@@ -174,12 +182,21 @@ body.template-collection {
   font-weight: 900;
   letter-spacing: .8px;
   text-transform: uppercase;
+  transition: background .2s ease, border-color .2s ease, transform .2s ease, box-shadow .2s ease;
 }
 
 .bhama-btn:hover {
   color: #fff;
   background: var(--bhama-red-dark);
   border-color: var(--bhama-red-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--bhama-shadow-soft);
+}
+
+.bhama-btn-outline:hover {
+  background: #fff;
+  color: var(--bhama-black);
+  box-shadow: none;
 }
 
 .bhama-btn-outline {
@@ -795,10 +812,6 @@ body.template-collection {
 }
 
 /* Product-page refinement */
-:root {
-  --bhama-font: system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
-}
-
 body.template-index,
 body.template-product,
 body.template-collection {
@@ -809,7 +822,7 @@ body.template-collection {
 .bhama-heading h2,
 .bhama-product-info h1,
 .bhama-collection-tile h3 {
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--bhama-font-display);
   font-weight: 600;
 }
 
