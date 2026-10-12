@@ -1760,6 +1760,10 @@ body {
   gap: clamp(10px, 1.4vw, 18px);
 }
 
+.bhama-card-media img {
+  aspect-ratio: 3 / 4;
+}
+
 .bhama-card {
   border-radius: 3px;
   box-shadow: 0 8px 20px rgba(31, 23, 15, .08);
@@ -1862,7 +1866,7 @@ body {
 
 .bhama-edit-rail-card img {
   display: block;
-  aspect-ratio: 3 / 4.2;
+  aspect-ratio: 3 / 4;
 }
 
 .bhama-edit-rail-info {
