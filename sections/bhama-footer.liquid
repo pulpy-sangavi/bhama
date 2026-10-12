@@ -1,0 +1,60 @@
+<footer class="bhama-footer">
+  <div class="bhama-container bhama-footer-grid">
+    <div>
+      {% if section.settings.logo != blank %}
+        {{ section.settings.logo | image_url: width: 280 | image_tag: loading: 'lazy', alt: shop.name, width: 132, height: 48 }}
+      {% else %}
+        <img src="{{ 'bhama-logo.png' | asset_url }}" alt="{{ shop.name }}" width="132" height="48">
+      {% endif %}
+      <p>{{ section.settings.copy }}</p>
+    </div>
+
+    <div>
+      <h3>Shop</h3>
+      <a href="{{ routes.collections_url }}">New In</a>
+      <a href="{{ routes.collections_url }}">Sarees</a>
+      <a href="{{ routes.collections_url }}">Suit Sets</a>
+      <a href="{{ routes.collections_url }}">The Bhama Edit</a>
+    </div>
+
+    <div>
+      <h3>Help</h3>
+      <a href="{{ routes.cart_url }}">Cart</a>
+      <a href="{{ routes.search_url }}">Search</a>
+      <a href="/pages/contact">Contact</a>
+      <a href="/policies/shipping-policy">Shipping</a>
+    </div>
+
+    <div>
+      <h3>Join The Bhama Circle</h3>
+      <p>New drops, private edits and restock notes straight to your inbox.</p>
+      {% form 'customer' %}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        <input class="bhama-select" type="email" name="contact[email]" placeholder="Enter your email" required>
+        <button class="bhama-btn" type="submit" style="margin-top:10px;width:100%;">Subscribe</button>
+      {% endform %}
+    </div>
+  </div>
+  <div class="bhama-container bhama-footer-bottom">
+    &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "BHAMA Footer",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "textarea",
+      "id": "copy",
+      "label": "Footer copy",
+      "default": "Contemporary and traditional fashion, thoughtfully curated for the modern woman."
+    }
+  ]
+}
+{% endschema %}

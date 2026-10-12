@@ -1,0 +1,63 @@
+<section class="bhama-section">
+  <div class="bhama-container">
+    <div class="bhama-heading">
+      <div>
+        <p class="bhama-eyebrow">Shop</p>
+        <h2>{{ collection.title | default: 'All Products' }}</h2>
+        {% if collection.description != blank %}
+          <p>{{ collection.description | strip_html | truncate: 160 }}</p>
+        {% endif %}
+      </div>
+    </div>
+
+    {% paginate collection.products by section.settings.products_per_page %}
+      <div class="bhama-grid">
+        {% for product in collection.products %}
+          <a class="bhama-card" href="{{ product.url }}">
+            <div class="bhama-card-media">
+              {% if product.compare_at_price > product.price %}
+                <span class="bhama-badge">Sale</span>
+              {% else %}
+                <span class="bhama-badge">New</span>
+              {% endif %}
+              {% if product.featured_image %}
+                {{ product.featured_image | image_url: width: 700 | image_tag: loading: 'lazy', alt: product.title, width: 700, height: 933 }}
+              {% else %}
+                <img src="{{ 'bhama-product-woven-vines.jpg' | asset_url }}" alt="{{ product.title | escape }}" width="700" height="933">
+              {% endif %}
+            </div>
+            <div class="bhama-card-info">
+              <h3>{{ product.title }}</h3>
+              <span class="bhama-price">{{ product.price | money }}</span>
+            </div>
+          </a>
+        {% else %}
+          <p>No products found in this collection yet.</p>
+        {% endfor %}
+      </div>
+
+      {% if paginate.pages > 1 %}
+        <div style="margin-top:34px;text-align:center;">
+          {{ paginate | default_pagination }}
+        </div>
+      {% endif %}
+    {% endpaginate %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "BHAMA Collection",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "Products per page",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "default": 16
+    }
+  ]
+}
+{% endschema %}

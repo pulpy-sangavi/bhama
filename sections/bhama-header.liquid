@@ -1,0 +1,57 @@
+<div class="bhama-announcement">
+  {{ section.settings.announcement }}
+</div>
+
+<header class="bhama-header">
+  <div class="bhama-container bhama-nav">
+    <a class="bhama-logo" href="{{ routes.root_url }}" aria-label="{{ shop.name }}">
+      {% if section.settings.logo != blank %}
+        {{ section.settings.logo | image_url: width: 320 | image_tag: loading: 'eager', alt: shop.name, width: 150, height: 54 }}
+      {% else %}
+        <img src="{{ 'bhama-logo.png' | asset_url }}" alt="{{ shop.name }}" width="150" height="54">
+      {% endif %}
+    </a>
+
+    <ul class="bhama-menu">
+      {% if section.settings.menu != blank %}
+        {% for link in section.settings.menu.links %}
+          <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+        {% endfor %}
+      {% else %}
+        <li><a href="{{ routes.collections_url }}">New In</a></li>
+        <li><a href="{{ routes.collections_url }}">Sarees</a></li>
+        <li><a href="{{ routes.collections_url }}">Suit Sets</a></li>
+        <li><a href="{{ routes.collections_url }}">The Bhama Edit</a></li>
+      {% endif %}
+    </ul>
+
+    <div class="bhama-actions">
+      <a href="{{ routes.search_url }}">Search</a>
+      <a href="{{ routes.cart_url }}">Bag <span class="bhama-cart-count">{{ cart.item_count }}</span></a>
+    </div>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "BHAMA Header",
+  "settings": [
+    {
+      "type": "text",
+      "id": "announcement",
+      "label": "Announcement",
+      "default": "New drops, freshly curated | Free shipping on selected products"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu"
+    }
+  ]
+}
+{% endschema %}

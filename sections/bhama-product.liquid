@@ -1,0 +1,66 @@
+<section class="bhama-container bhama-product-page">
+  <div class="bhama-product-gallery">
+    <div class="bhama-product-main">
+      {% if product.featured_media %}
+        {{ product.featured_media.preview_image | image_url: width: 1200 | image_tag: loading: 'eager', alt: product.title, width: 1200, height: 1500 }}
+      {% else %}
+        <img src="{{ 'bhama-product-woven-vines.jpg' | asset_url }}" alt="{{ product.title | escape }}" width="1200" height="1500">
+      {% endif %}
+    </div>
+
+    {% if product.media.size > 1 %}
+      <div class="bhama-product-thumbs">
+        {% for media in product.media limit: 5 %}
+          {{ media.preview_image | image_url: width: 220 | image_tag: loading: 'lazy', alt: product.title, width: 220, height: 220 }}
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+
+  <article class="bhama-product-info">
+    <p class="bhama-eyebrow">{{ product.type | default: 'BHAMA Edit' }}</p>
+    <h1>{{ product.title }}</h1>
+    <p class="bhama-product-price">{{ product.selected_or_first_available_variant.price | money }}</p>
+
+    {% if product.description != blank %}
+      <div class="bhama-product-description">{{ product.description }}</div>
+    {% else %}
+      <p class="bhama-product-description">Beautifully curated for festive, traditional and everyday occasion wear.</p>
+    {% endif %}
+
+    {% form 'product', product, class: 'bhama-product-form' %}
+      <select class="bhama-select" name="id" aria-label="Choose variant">
+        {% for variant in product.variants %}
+          <option
+            value="{{ variant.id }}"
+            {% if variant == product.selected_or_first_available_variant %}selected{% endif %}
+            {% unless variant.available %}disabled{% endunless %}
+          >
+            {{ variant.title }} - {{ variant.price | money }}{% unless variant.available %} - Sold out{% endunless %}
+          </option>
+        {% endfor %}
+      </select>
+
+      <input class="bhama-quantity" type="number" name="quantity" value="1" min="1" aria-label="Quantity">
+
+      <button class="bhama-add" type="submit" name="add" {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}>
+        {% if product.selected_or_first_available_variant.available %}Add to Cart{% else %}Sold Out{% endif %}
+      </button>
+
+      {{ form | payment_button }}
+    {% endform %}
+
+    <div class="bhama-benefits">
+      <span>Secure checkout</span>
+      <span>Fast dispatch</span>
+      <span>Quality checked before shipping</span>
+    </div>
+  </article>
+</section>
+
+{% schema %}
+{
+  "name": "BHAMA Product",
+  "settings": []
+}
+{% endschema %}

@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "main": {
+      "type": "bhama-product",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

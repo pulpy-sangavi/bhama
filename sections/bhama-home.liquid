@@ -1,0 +1,160 @@
+{% assign featured_collection = collections[section.settings.featured_collection] %}
+
+<section class="bhama-hero" style="--bhama-hero-image: url({{ 'bhama-banner.png' | asset_url }});">
+  <div class="bhama-container">
+    <div class="bhama-hero-copy">
+      <p class="bhama-eyebrow">{{ section.settings.hero_eyebrow }}</p>
+      <h1>{{ section.settings.hero_title }}</h1>
+      <p>{{ section.settings.hero_text }}</p>
+      <div class="bhama-btn-row">
+        <a class="bhama-btn" href="{{ section.settings.primary_link }}">Shop New In</a>
+        <a class="bhama-btn bhama-btn-outline" href="{{ section.settings.secondary_link }}">Explore The Edit</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bhama-section">
+  <div class="bhama-container">
+    <div class="bhama-heading">
+      <div>
+        <p class="bhama-eyebrow">Fresh from the edit</p>
+        <h2>Just Dropped</h2>
+        <p>New finds. Limited pieces. Always changing.</p>
+      </div>
+      <a class="bhama-btn bhama-btn-outline" href="{{ routes.collections_url }}">View all</a>
+    </div>
+
+    <div class="bhama-grid">
+      {% if featured_collection.products_count > 0 %}
+        {% for product in featured_collection.products limit: 4 %}
+          <a class="bhama-card" href="{{ product.url }}">
+            <div class="bhama-card-media">
+              <span class="bhama-badge">New</span>
+              {% if product.featured_image %}
+                {{ product.featured_image | image_url: width: 700 | image_tag: loading: 'lazy', alt: product.title, width: 700, height: 933 }}
+              {% else %}
+                <img src="{{ 'bhama-product-woven-vines.jpg' | asset_url }}" alt="{{ product.title }}" width="700" height="933">
+              {% endif %}
+            </div>
+            <div class="bhama-card-info">
+              <h3>{{ product.title }}</h3>
+              <span class="bhama-price">{{ product.price | money }}</span>
+            </div>
+          </a>
+        {% endfor %}
+      {% else %}
+        {% assign fallback_titles = 'Woven Vines Modal Chanderi Set|Banarasi Soft Silk Saree|Ishani Jamdani Weaving Saree|Premium Soft Silk Zari Weaves Saree' | split: '|' %}
+        {% assign fallback_images = 'bhama-product-woven-vines.jpg|bhama-product-banarasi.jpg|bhama-product-ishani.jpg|bhama-product-zari.jpg' | split: '|' %}
+        {% assign fallback_prices = 'Rs. 2,499|Rs. 4,899|Rs. 3,600|Rs. 4,900' | split: '|' %}
+        {% for title in fallback_titles %}
+          <a class="bhama-card" href="{{ routes.collections_url }}">
+            <div class="bhama-card-media">
+              <span class="bhama-badge">New</span>
+              <img src="{{ fallback_images[forloop.index0] | asset_url }}" alt="{{ title }}" width="700" height="933">
+            </div>
+            <div class="bhama-card-info">
+              <h3>{{ title }}</h3>
+              <span class="bhama-price">{{ fallback_prices[forloop.index0] }}</span>
+            </div>
+          </a>
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<section class="bhama-section bhama-section-dark">
+  <div class="bhama-container">
+    <div class="bhama-heading">
+      <div>
+        <p class="bhama-eyebrow">Discover Bhama</p>
+        <h2>Different styles. One Bhama.</h2>
+      </div>
+    </div>
+    <div class="bhama-collection-grid">
+      <a class="bhama-collection-tile" href="{{ routes.collections_url }}">
+        <img src="{{ 'bhama-collection-fusion.png' | asset_url }}" alt="Contemporary fashion" width="800" height="1000">
+        <div><h3>Contemporary</h3><span>Modern silhouettes for everyday and beyond</span></div>
+      </a>
+      <a class="bhama-collection-tile" href="{{ routes.collections_url }}">
+        <img src="{{ 'bhama-collection-traditional.png' | asset_url }}" alt="Traditional fashion" width="800" height="1000">
+        <div><h3>Traditional</h3><span>Timeless Indian styles, thoughtfully selected</span></div>
+      </a>
+      <a class="bhama-collection-tile" href="{{ routes.collections_url }}">
+        <img src="{{ 'bhama-collection-accessories.png' | asset_url }}" alt="Accessories" width="800" height="1000">
+        <div><h3>Accessories</h3><span>The finishing touches</span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="bhama-section">
+  <div class="bhama-container">
+    <div class="bhama-heading">
+      <div>
+        <p class="bhama-eyebrow">Watch the edit</p>
+        <h2>@BHAMA Reels</h2>
+        <p>Short styling videos and product movement from the Bhama world.</p>
+      </div>
+    </div>
+    <div class="bhama-reel-grid">
+      {% assign reel_videos = 'bhama-reel-1.mp4|bhama-reel-2.mp4|bhama-reel-3.mp4|bhama-reel-4.mp4' | split: '|' %}
+      {% assign reel_titles = 'New arrivals|Saree details|Festive edit|Suit set look' | split: '|' %}
+      {% for reel in reel_videos %}
+        <div class="bhama-reel" data-bhama-reel>
+          <video src="{{ reel | asset_url }}" muted loop playsinline preload="metadata"></video>
+          <span>{{ reel_titles[forloop.index0] }}</span>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "BHAMA Home",
+  "settings": [
+    {
+      "type": "text",
+      "id": "hero_eyebrow",
+      "label": "Hero eyebrow",
+      "default": "Bhama"
+    },
+    {
+      "type": "text",
+      "id": "hero_title",
+      "label": "Hero title",
+      "default": "Style, Your Way."
+    },
+    {
+      "type": "textarea",
+      "id": "hero_text",
+      "label": "Hero text",
+      "default": "Contemporary and traditional fashion, thoughtfully curated for the modern woman."
+    },
+    {
+      "type": "url",
+      "id": "primary_link",
+      "label": "Primary button link",
+      "default": "/collections/all"
+    },
+    {
+      "type": "url",
+      "id": "secondary_link",
+      "label": "Secondary button link",
+      "default": "/collections/all"
+    },
+    {
+      "type": "collection",
+      "id": "featured_collection",
+      "label": "Featured collection"
+    }
+  ],
+  "presets": [
+    {
+      "name": "BHAMA Home"
+    }
+  ]
+}
+{% endschema %}

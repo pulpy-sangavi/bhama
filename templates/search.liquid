@@ -1,0 +1,37 @@
+<section class="bhama-section">
+  <div class="bhama-container">
+    <div class="bhama-heading">
+      <div>
+        <p class="bhama-eyebrow">Search</p>
+        <h2>Search BHAMA</h2>
+      </div>
+    </div>
+
+    <form action="{{ routes.search_url }}" method="get" role="search" style="margin-bottom:28px;">
+      <input class="bhama-select" type="search" name="q" value="{{ search.terms | escape }}" placeholder="Search products">
+      <button class="bhama-btn" type="submit" style="margin-top:10px;">Search</button>
+    </form>
+
+    {% if search.performed %}
+      <div class="bhama-grid">
+        {% for item in search.results %}
+          {% if item.object_type == 'product' %}
+            <a class="bhama-card" href="{{ item.url }}">
+              <div class="bhama-card-media">
+                {% if item.featured_image %}
+                  {{ item.featured_image | image_url: width: 700 | image_tag: loading: 'lazy', alt: item.title, width: 700, height: 933 }}
+                {% endif %}
+              </div>
+              <div class="bhama-card-info">
+                <h3>{{ item.title }}</h3>
+                <span class="bhama-price">{{ item.price | money }}</span>
+              </div>
+            </a>
+          {% endif %}
+        {% else %}
+          <p>No results found.</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</section>

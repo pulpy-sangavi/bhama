@@ -1,0 +1,17 @@
+{
+  "sections": {
+    "main": {
+      "type": "bhama-home",
+      "settings": {
+        "hero_eyebrow": "Bhama",
+        "hero_title": "Style, Your Way.",
+        "hero_text": "Contemporary and traditional fashion, thoughtfully curated for the modern woman.",
+        "primary_link": "/collections/all",
+        "secondary_link": "/collections/all"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}
