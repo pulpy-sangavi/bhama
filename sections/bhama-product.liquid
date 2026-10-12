@@ -1,26 +1,83 @@
-<section class="bhama-container bhama-product-page">
+<script type="application/json" data-bhama-product-json>
+  {{ product | json }}
+</script>
+
+<section class="bhama-container bhama-product-page" data-bhama-product data-money-format="{{ shop.money_format | escape }}">
   <div class="bhama-product-gallery">
-    <div class="bhama-product-main">
-      {% if product.featured_media %}
-        {{ product.featured_media.preview_image | image_url: width: 1200 | image_tag: loading: 'eager', alt: product.title, width: 1200, height: 1500 }}
+    <div class="bhama-product-main" data-bhama-product-gallery>
+      {% assign gallery_index = 0 %}
+      {% for media in product.media %}
+        {% if media.media_type == 'image' %}
+          {% assign image_loading = 'lazy' %}
+          {% if gallery_index == 0 %}{% assign image_loading = 'eager' %}{% endif %}
+          <img
+            class="bhama-product-image"
+            src="{{ media.preview_image | image_url: width: 1800 }}"
+            alt="{{ media.alt | default: product.title | escape }}"
+            width="{{ media.preview_image.width }}"
+            height="{{ media.preview_image.height }}"
+            loading="{{ image_loading }}"
+            data-bhama-image="{{ gallery_index }}"
+            data-media-id="{{ media.id }}"
+            {% if gallery_index > 0 %}hidden{% endif %}
+          >
+          {% assign gallery_index = gallery_index | plus: 1 %}
+        {% endif %}
       {% else %}
-        <img src="{{ 'bhama-product-woven-vines.jpg' | asset_url }}" alt="{{ product.title | escape }}" width="1200" height="1500">
-      {% endif %}
+        <img src="{{ 'bhama-product-woven-vines.jpg' | asset_url }}" alt="{{ product.title | escape }}" width="1200" height="1800" class="bhama-product-image">
+      {% endfor %}
     </div>
 
     {% if product.media.size > 1 %}
       <div class="bhama-product-thumbs">
-        {% for media in product.media limit: 5 %}
-          {{ media.preview_image | image_url: width: 220 | image_tag: loading: 'lazy', alt: product.title, width: 220, height: 220 }}
+        {% assign gallery_index = 0 %}
+        {% for media in product.media limit: 6 %}
+          {% if media.media_type == 'image' %}
+            <button
+              class="bhama-product-thumb{% if gallery_index == 0 %} is-active{% endif %}"
+              type="button"
+              data-bhama-thumbnail="{{ gallery_index }}"
+              aria-label="View product image {{ gallery_index | plus: 1 }}"
+              aria-pressed="{% if gallery_index == 0 %}true{% else %}false{% endif %}"
+            >
+              {{
+                media.preview_image
+                | image_url: width: 240
+                | image_tag: loading: 'lazy', alt: media.alt | default: product.title, width: 240, height: 240
+              }}
+            </button>
+            {% assign gallery_index = gallery_index | plus: 1 %}
+          {% endif %}
         {% endfor %}
       </div>
     {% endif %}
   </div>
 
   <article class="bhama-product-info">
-    <p class="bhama-eyebrow">{{ product.type | default: 'BHAMA Edit' }}</p>
+    <div class="bhama-product-vendor-row">
+      <p class="bhama-eyebrow">{{ product.vendor | default: shop.name }}</p>
+      {% if product.selected_or_first_available_variant.available %}
+        <span class="bhama-stock-pill" data-bhama-stock>In stock</span>
+      {% else %}
+        <span class="bhama-stock-pill is-sold-out" data-bhama-stock>Sold out</span>
+      {% endif %}
+    </div>
+
     <h1>{{ product.title }}</h1>
-    <p class="bhama-product-price">{{ product.selected_or_first_available_variant.price | money }}</p>
+
+    <div class="bhama-rating" aria-label="Customer favorite">
+      <span>★★★★★</span>
+      <strong>Customer favourite</strong>
+    </div>
+
+    <div class="bhama-product-price-row">
+      <p class="bhama-product-price" data-bhama-price>{{ product.selected_or_first_available_variant.price | money }}</p>
+      {% if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price %}
+        <p class="bhama-product-compare" data-bhama-compare>{{ product.selected_or_first_available_variant.compare_at_price | money }}</p>
+      {% else %}
+        <p class="bhama-product-compare is-hidden" data-bhama-compare></p>
+      {% endif %}
+    </div>
 
     {% if product.description != blank %}
       <div class="bhama-product-description">{{ product.description }}</div>
@@ -28,8 +85,33 @@
       <p class="bhama-product-description">Beautifully curated for festive, traditional and everyday occasion wear.</p>
     {% endif %}
 
-    {% form 'product', product, class: 'bhama-product-form' %}
-      <select class="bhama-select" name="id" aria-label="Choose variant">
+    {% form 'product', product, class: 'bhama-product-form', data-bhama-product-form: '' %}
+      <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" data-bhama-variant-id>
+
+      {% unless product.has_only_default_variant %}
+        <div class="bhama-options">
+          {% for option in product.options_with_values %}
+            <fieldset class="bhama-option-group" data-bhama-option-group data-option-position="{{ option.position }}">
+              <legend>{{ option.name }}</legend>
+              <div class="bhama-option-values">
+                {% for value in option.values %}
+                  <button
+                    type="button"
+                    class="bhama-option-value{% if option.selected_value == value %} is-active{% endif %}"
+                    data-bhama-option-value="{{ value | escape }}"
+                    aria-pressed="{% if option.selected_value == value %}true{% else %}false{% endif %}"
+                  >
+                    {{ value }}
+                  </button>
+                {% endfor %}
+              </div>
+            </fieldset>
+          {% endfor %}
+        </div>
+      {% endunless %}
+
+      <label class="bhama-field-label" for="BhamaVariant-{{ section.id }}">Selected variant</label>
+      <select class="bhama-select" id="BhamaVariant-{{ section.id }}" aria-label="Choose variant" data-bhama-variant-select>
         {% for variant in product.variants %}
           <option
             value="{{ variant.id }}"
@@ -41,19 +123,32 @@
         {% endfor %}
       </select>
 
-      <input class="bhama-quantity" type="number" name="quantity" value="1" min="1" aria-label="Quantity">
+      <div class="bhama-qty-row">
+        <label class="bhama-field-label" for="BhamaQuantity-{{ section.id }}">Quantity</label>
+        <div class="bhama-qty-stepper">
+          <button type="button" data-bhama-qty-minus aria-label="Decrease quantity">-</button>
+          <input class="bhama-quantity" id="BhamaQuantity-{{ section.id }}" type="number" name="quantity" value="1" min="1" aria-label="Quantity" data-bhama-qty>
+          <button type="button" data-bhama-qty-plus aria-label="Increase quantity">+</button>
+        </div>
+      </div>
 
-      <button class="bhama-add" type="submit" name="add" {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}>
-        {% if product.selected_or_first_available_variant.available %}Add to Cart{% else %}Sold Out{% endif %}
-      </button>
+      <div class="bhama-purchase-actions">
+        <button class="bhama-add" type="submit" name="add" data-bhama-add {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}>
+          <span data-bhama-add-label>{% if product.selected_or_first_available_variant.available %}Add to Cart{% else %}Sold Out{% endif %}</span>
+        </button>
 
-      {{ form | payment_button }}
+        <button class="bhama-buy-now" type="button" data-bhama-buy-now {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}>
+          Buy Now
+        </button>
+      </div>
+
+      <p class="bhama-form-message" data-bhama-form-message role="status" aria-live="polite"></p>
     {% endform %}
 
     <div class="bhama-benefits">
-      <span>Secure checkout</span>
-      <span>Fast dispatch</span>
-      <span>Quality checked before shipping</span>
+      <span>Free shipping on selected products</span>
+      <span>Secure checkout and prepaid support</span>
+      <span>Quality checked before dispatch</span>
     </div>
   </article>
 </section>
