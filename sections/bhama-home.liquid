@@ -4,7 +4,7 @@
   <div class="bhama-container">
     <div class="bhama-hero-copy">
       <p class="bhama-eyebrow">{{ section.settings.hero_eyebrow }}</p>
-      <h1>{{ section.settings.hero_title }}</h1>
+      <h1>{{ section.settings.hero_title | escape | replace: ', ', ',<br>' }}</h1>
       <p>{{ section.settings.hero_text }}</p>
       <div class="bhama-btn-row">
         <a class="bhama-btn" href="{{ section.settings.primary_link }}">Shop New In</a>

@@ -2216,11 +2216,12 @@ body {
   }
 
   .bhama-hero-copy {
-    max-width: 78%;
+    max-width: min(92%, 360px);
   }
 
   .bhama-hero h1 {
-    font-size: clamp(42px, 12vw, 58px);
+    max-width: none;
+    font-size: clamp(38px, 10vw, 48px);
   }
 
   .bhama-hero p {
