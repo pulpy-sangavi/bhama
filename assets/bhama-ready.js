@@ -1,174 +1,293 @@
-document.addEventListener("DOMContentLoaded", function () {
-  var updateCartCount = function (count) {
-    document.querySelectorAll(".bhama-cart-count").forEach(function (el) {
-      el.textContent = count;
-    });
-  };
+(function () {
+  "use strict";
 
-  document.querySelectorAll("[data-bhama-product]").forEach(function (root) {
-    var variantsEl = root.querySelector("[data-bhama-variants]");
-    var variants = [];
-    if (variantsEl) {
-      try { variants = JSON.parse(variantsEl.textContent); } catch (e) { variants = []; }
+  function formatMoney(cents, format) {
+    var value = (Number(cents || 0) / 100).toFixed(2);
+    var money = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return (format || "Rs. {{amount}}")
+      .replace(/\{\{\s*amount\s*\}\}/, money)
+      .replace(/\{\{\s*amount_no_decimals\s*\}\}/, Math.round(Number(cents || 0) / 100));
+  }
+
+  function setLoading(button, isLoading, label) {
+    if (!button) return;
+    if (isLoading) {
+      button.dataset.originalHtml = button.innerHTML;
+      button.dataset.wasDisabled = button.disabled ? "true" : "false";
+      button.classList.add("is-loading");
+      button.disabled = true;
+      button.textContent = label || "Please wait";
+      return;
     }
-    var moneyFormat = (variantsEl && variantsEl.getAttribute("data-money-format")) || "{{amount}}";
-    var formatMoney = function (cents) {
-      var amount = (cents / 100).toLocaleString("en-IN", { minimumFractionDigits: cents % 100 === 0 ? 0 : 2 });
-      return moneyFormat.replace(/\{\{\s*amount\s*\}\}/, amount);
-    };
+    button.classList.remove("is-loading");
+    button.disabled = button.dataset.wasDisabled === "true";
+    if (button.dataset.originalHtml) button.innerHTML = button.dataset.originalHtml;
+    delete button.dataset.originalHtml;
+    delete button.dataset.wasDisabled;
+  }
 
-    var mainImage = root.querySelector("[data-bhama-main-image]");
-    var thumbs = Array.prototype.slice.call(root.querySelectorAll("[data-bhama-thumb]"));
-    thumbs.forEach(function (thumb) {
-      thumb.addEventListener("click", function () {
-        thumbs.forEach(function (t) { t.classList.remove("is-active"); });
-        thumb.classList.add("is-active");
-        if (mainImage) mainImage.src = thumb.getAttribute("data-full");
+  function updateCartCount() {
+    return fetch("/cart.js", { headers: { Accept: "application/json" } })
+      .then(function (response) {
+        if (!response.ok) throw new Error("The bag count couldn't be refreshed.");
+        return response.json();
+      })
+      .then(function (cart) {
+        document.querySelectorAll("[data-bhama-cart-count]").forEach(function (node) {
+          node.textContent = cart.item_count;
+        });
+        return cart;
+      });
+  }
+
+  function initReels() {
+    document.querySelectorAll("[data-bhama-reel]").forEach(function (tile) {
+      var video = tile.querySelector("video");
+      if (!video) return;
+
+      tile.addEventListener("click", function () {
+        document.querySelectorAll("[data-bhama-reel] video").forEach(function (other) {
+          if (other !== video) other.pause();
+        });
+
+        if (video.paused) {
+          video.muted = false;
+          video.controls = true;
+          video.play();
+        } else {
+          video.pause();
+        }
+      });
+
+      video.addEventListener("pause", function () {
+        video.controls = false;
+        video.muted = true;
       });
     });
+  }
 
-    var optionRows = Array.prototype.slice.call(root.querySelectorAll("[data-bhama-option-row]"));
-    var variantIdInput = root.querySelector("[data-bhama-variant-id]");
-    var priceEl = root.querySelector("[data-bhama-price]");
-    var comparePriceEl = root.querySelector("[data-bhama-compare-price]");
-    var stockEl = root.querySelector("[data-bhama-stock]");
-    var addBtn = root.querySelector("[data-bhama-add]");
+  function initProduct() {
+    var root = document.querySelector("[data-bhama-product]");
+    var jsonNode = root && root.querySelector("[data-bhama-product-json], [data-bhama-variants]");
+    if (!root || !jsonNode) return;
+
+    var product = JSON.parse(jsonNode.textContent);
+    var moneyFormat = root.dataset.moneyFormat || "Rs. {{amount}}";
+    var form = root.querySelector("[data-bhama-product-form]");
+    var variantInput = root.querySelector("[data-bhama-variant-id]");
+    var variantSelect = root.querySelector("[data-bhama-variant-select]");
+    var priceNode = root.querySelector("[data-bhama-price]");
+    var compareNode = root.querySelector("[data-bhama-compare]");
+    var stockNode = root.querySelector("[data-bhama-stock]");
+    var addButton = root.querySelector("[data-bhama-add]");
     var addLabel = root.querySelector("[data-bhama-add-label]");
-    var buyNowBtn = root.querySelector("[data-bhama-buy-now]");
-    var message = root.querySelector("[data-bhama-message]");
+    var buyButton = root.querySelector("[data-bhama-buy-now]");
     var qtyInput = root.querySelector("[data-bhama-qty]");
+    var message = root.querySelector("[data-bhama-form-message]");
+    var selectedOptions = {};
+    var currentVariant = findVariantById(variantInput && variantInput.value);
 
-    var getSelected = function () {
-      return optionRows.map(function (row) {
-        var active = row.querySelector("[data-bhama-option-value].is-active");
-        return active ? active.getAttribute("data-bhama-option-value") : null;
+    root.querySelectorAll("[data-bhama-option-group]").forEach(function (group) {
+      var position = Number(group.dataset.optionPosition) - 1;
+      var active = group.querySelector(".is-active");
+      if (active) selectedOptions[position] = active.dataset.bhamaOptionValue;
+    });
+
+    function showMessage(text, type) {
+      if (!message) return;
+      message.textContent = text || "";
+      message.classList.toggle("is-error", type === "error");
+      message.classList.toggle("is-success", type === "success");
+    }
+
+    function findVariantByOptions() {
+      return product.variants.find(function (variant) {
+        return variant.options.every(function (value, index) {
+          return selectedOptions[index] === value;
+        });
       });
-    };
+    }
 
-    var findVariant = function (selected) {
-      return variants.filter(function (variant) {
-        var opts = [variant.option1, variant.option2, variant.option3];
-        return selected.every(function (value, i) { return value === null || opts[i] === value; });
-      })[0];
-    };
+    function findVariantById(id) {
+      return product.variants.find(function (variant) {
+        return String(variant.id) === String(id);
+      });
+    }
 
-    var applyVariant = function (variant) {
-      if (!variant) {
-        if (addBtn) addBtn.setAttribute("disabled", "disabled");
-        if (buyNowBtn) buyNowBtn.setAttribute("disabled", "disabled");
-        if (stockEl) stockEl.textContent = "Unavailable";
-        return;
-      }
-      if (variantIdInput) variantIdInput.value = variant.id;
-      if (priceEl) priceEl.textContent = formatMoney(variant.price);
-      if (comparePriceEl) {
+    function showGalleryImage(mediaId) {
+      if (!mediaId) return;
+      var images = Array.prototype.slice.call(root.querySelectorAll("[data-bhama-image]"));
+      var target = images.find(function (image) {
+        return String(image.dataset.mediaId) === String(mediaId);
+      });
+      if (!target) return;
+
+      images.forEach(function (image) {
+        image.hidden = image !== target;
+      });
+      root.querySelectorAll("[data-bhama-thumbnail]").forEach(function (thumb) {
+        var isActive = thumb.dataset.bhamaThumbnail === target.dataset.bhamaImage;
+        thumb.classList.toggle("is-active", isActive);
+        thumb.setAttribute("aria-pressed", isActive ? "true" : "false");
+      });
+    }
+
+    function renderVariant(variant) {
+      currentVariant = variant || null;
+      var available = Boolean(variant && variant.available);
+      if (variantInput && variant) variantInput.value = variant.id;
+      if (variantSelect && variant) variantSelect.value = variant.id;
+      if (priceNode && variant) priceNode.textContent = formatMoney(variant.price, moneyFormat);
+
+      if (compareNode && variant) {
         if (variant.compare_at_price && variant.compare_at_price > variant.price) {
-          comparePriceEl.textContent = formatMoney(variant.compare_at_price);
-          comparePriceEl.style.display = "";
+          compareNode.textContent = formatMoney(variant.compare_at_price, moneyFormat);
+          compareNode.classList.remove("is-hidden");
         } else {
-          comparePriceEl.style.display = "none";
+          compareNode.textContent = "";
+          compareNode.classList.add("is-hidden");
         }
       }
-      if (variant.featured_image && mainImage) {
-        mainImage.src = variant.featured_image.src;
-      }
-      if (stockEl) stockEl.textContent = variant.available ? "In stock" : "Sold out";
-      [addBtn, buyNowBtn].forEach(function (btn) {
-        if (!btn) return;
-        if (variant.available) btn.removeAttribute("disabled");
-        else btn.setAttribute("disabled", "disabled");
-      });
-      if (addLabel) addLabel.textContent = variant.available ? "Add to Cart" : "Sold Out";
-    };
 
-    optionRows.forEach(function (row) {
-      var buttons = Array.prototype.slice.call(row.querySelectorAll("[data-bhama-option-value]"));
-      buttons.forEach(function (button) {
-        button.addEventListener("click", function () {
-          buttons.forEach(function (b) { b.classList.remove("is-active"); });
-          button.classList.add("is-active");
-          applyVariant(findVariant(getSelected()));
+      if (stockNode) {
+        stockNode.textContent = !variant ? "Unavailable" : available ? "In stock" : "Sold out";
+        stockNode.classList.toggle("is-sold-out", !available);
+      }
+
+      [addButton, buyButton].forEach(function (button) {
+        if (button) button.disabled = !available;
+      });
+      if (addLabel) addLabel.textContent = available ? "Add to Cart" : "Sold Out";
+
+      if (variant && variant.featured_media) showGalleryImage(variant.featured_media.id);
+      showMessage("", "");
+    }
+
+    renderVariant(currentVariant);
+
+    root.querySelectorAll("[data-bhama-thumbnail]").forEach(function (thumb) {
+      thumb.addEventListener("click", function () {
+        var index = thumb.dataset.bhamaThumbnail;
+        root.querySelectorAll("[data-bhama-image]").forEach(function (image) {
+          image.hidden = image.dataset.bhamaImage !== index;
+        });
+        root.querySelectorAll("[data-bhama-thumbnail]").forEach(function (other) {
+          var active = other === thumb;
+          other.classList.toggle("is-active", active);
+          other.setAttribute("aria-pressed", active ? "true" : "false");
         });
       });
     });
 
-    if (qtyInput) {
-      var minusBtn = root.querySelector("[data-bhama-qty-minus]");
-      var plusBtn = root.querySelector("[data-bhama-qty-plus]");
-      if (minusBtn) minusBtn.addEventListener("click", function () {
-        qtyInput.value = Math.max(1, (parseInt(qtyInput.value, 10) || 1) - 1);
+    root.querySelectorAll("[data-bhama-option-value]").forEach(function (button) {
+      button.addEventListener("click", function () {
+        var group = button.closest("[data-bhama-option-group]");
+        var position = Number(group.dataset.optionPosition) - 1;
+        selectedOptions[position] = button.dataset.bhamaOptionValue;
+
+        group.querySelectorAll("[data-bhama-option-value]").forEach(function (other) {
+          var active = other === button;
+          other.classList.toggle("is-active", active);
+          other.setAttribute("aria-pressed", active ? "true" : "false");
+        });
+
+        renderVariant(findVariantByOptions());
       });
-      if (plusBtn) plusBtn.addEventListener("click", function () {
-        qtyInput.value = (parseInt(qtyInput.value, 10) || 1) + 1;
+    });
+
+    if (variantSelect) {
+      variantSelect.addEventListener("change", function () {
+        var variant = findVariantById(variantSelect.value);
+        if (!variant) return;
+        variant.options.forEach(function (value, index) {
+          selectedOptions[index] = value;
+          var group = root.querySelector('[data-option-position="' + (index + 1) + '"]');
+          if (!group) return;
+          group.querySelectorAll("[data-bhama-option-value]").forEach(function (button) {
+            var active = button.dataset.bhamaOptionValue === value;
+            button.classList.toggle("is-active", active);
+            button.setAttribute("aria-pressed", active ? "true" : "false");
+          });
+        });
+        renderVariant(variant);
       });
     }
 
-    var addToCart = function (redirectToCheckout) {
-      if (!variantIdInput) return;
-      var qty = qtyInput ? Number(qtyInput.value || 1) : 1;
-      if (message) message.textContent = "Adding to bag...";
+    var minusButton = root.querySelector("[data-bhama-qty-minus]");
+    var plusButton = root.querySelector("[data-bhama-qty-plus]");
+    if (minusButton) {
+      minusButton.addEventListener("click", function () {
+        qtyInput.value = Math.max(1, Number(qtyInput.value || 1) - 1);
+      });
+    }
+    if (plusButton) {
+      plusButton.addEventListener("click", function () {
+        qtyInput.value = Number(qtyInput.value || 1) + 1;
+      });
+    }
 
-      fetch("/cart/add.js", {
+    function addToCart(redirectToCheckout) {
+      var variant = currentVariant;
+      if (!variant || !variant.available) {
+        showMessage("This variant is currently sold out.", "error");
+        return Promise.resolve();
+      }
+
+      var formData = new FormData();
+      formData.append("id", variant.id);
+      formData.append("quantity", Math.max(1, Number(qtyInput.value || 1)));
+
+      setLoading(redirectToCheckout ? buyButton : addButton, true, redirectToCheckout ? "Opening checkout" : "Adding");
+      showMessage("", "");
+
+      return fetch("/cart/add.js", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({ items: [{ id: Number(variantIdInput.value), quantity: qty }] })
+        headers: { Accept: "application/json" },
+        body: formData
       })
         .then(function (response) {
-          if (!response.ok) return response.json().then(function (err) { throw err; });
+          if (!response.ok) {
+            return response.json().then(function (error) {
+              throw new Error(error.description || "Could not add item to cart.");
+            });
+          }
           return response.json();
+        })
+        .then(function () {
+          return updateCartCount();
         })
         .then(function () {
           if (redirectToCheckout) {
             window.location.href = "/checkout";
             return;
           }
-          return fetch("/cart.js")
-            .then(function (res) { return res.json(); })
-            .then(function (cart) {
-              updateCartCount(cart.item_count);
-              if (message) message.textContent = "Added to cart.";
-            });
+          showMessage("Added to bag. You can continue shopping or open your bag.", "success");
         })
-        .catch(function (err) {
-          if (message) message.textContent = (err && err.description) || "Couldn't add this item. Please try again.";
+        .catch(function (error) {
+          showMessage(error.message || "Could not add item. Please try again.", "error");
+        })
+        .finally(function () {
+          setLoading(addButton, false);
+          setLoading(buyButton, false);
         });
-    };
+    }
 
-    var form = root.querySelector("#BhamaProductForm");
     if (form) {
       form.addEventListener("submit", function (event) {
         event.preventDefault();
         addToCart(false);
       });
     }
-    if (buyNowBtn) {
-      buyNowBtn.addEventListener("click", function () {
+
+    if (buyButton) {
+      buyButton.addEventListener("click", function () {
         addToCart(true);
       });
     }
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    initReels();
+    initProduct();
   });
-
-  document.querySelectorAll("[data-bhama-reel]").forEach(function (tile) {
-    var video = tile.querySelector("video");
-    if (!video) return;
-
-    tile.addEventListener("click", function () {
-      document.querySelectorAll("[data-bhama-reel] video").forEach(function (other) {
-        if (other !== video) other.pause();
-      });
-
-      if (video.paused) {
-        video.muted = false;
-        video.controls = true;
-        video.play();
-      } else {
-        video.pause();
-      }
-    });
-
-    video.addEventListener("pause", function () {
-      video.controls = false;
-      video.muted = true;
-    });
-  });
-});
+})();

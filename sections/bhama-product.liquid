@@ -1,8 +1,8 @@
-<script type="application/json" data-bhama-product-json>
-  {{ product | json }}
-</script>
-
 <section class="bhama-container bhama-product-page" data-bhama-product data-money-format="{{ shop.money_format | escape }}">
+  <script type="application/json" data-bhama-product-json>
+    {{ product | json }}
+  </script>
+
   <div class="bhama-product-gallery">
     <div class="bhama-product-main" data-bhama-product-gallery>
       {% assign gallery_index = 0 %}
@@ -66,7 +66,7 @@
     <h1>{{ product.title }}</h1>
 
     <div class="bhama-rating" aria-label="Customer favorite">
-      <span>★★★★★</span>
+      <span>5.0</span>
       <strong>Customer favourite</strong>
     </div>
 
@@ -109,19 +109,6 @@
           {% endfor %}
         </div>
       {% endunless %}
-
-      <label class="bhama-field-label" for="BhamaVariant-{{ section.id }}">Selected variant</label>
-      <select class="bhama-select" id="BhamaVariant-{{ section.id }}" aria-label="Choose variant" data-bhama-variant-select>
-        {% for variant in product.variants %}
-          <option
-            value="{{ variant.id }}"
-            {% if variant == product.selected_or_first_available_variant %}selected{% endif %}
-            {% unless variant.available %}disabled{% endunless %}
-          >
-            {{ variant.title }} - {{ variant.price | money }}{% unless variant.available %} - Sold out{% endunless %}
-          </option>
-        {% endfor %}
-      </select>
 
       <div class="bhama-qty-row">
         <label class="bhama-field-label" for="BhamaQuantity-{{ section.id }}">Quantity</label>

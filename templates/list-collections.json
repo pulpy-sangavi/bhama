@@ -1,0 +1,12 @@
+{
+  "sections": {
+    "main": {
+      "type": "bhama-collection-list",
+      "settings": {
+        "heading": "Shop by Collection",
+        "subtext": "Browse the full edit, organised by category."
+      }
+    }
+  },
+  "order": ["main"]
+}
