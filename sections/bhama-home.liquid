@@ -1,4 +1,4 @@
-{% assign featured_collection = collections[section.settings.featured_collection] %}
+{% assign featured_collection = section.settings.featured_collection %}
 
 <section class="bhama-hero" style="--bhama-hero-image: url({{ 'bhama-banner.png' | asset_url }});">
   <div class="bhama-container">
@@ -26,7 +26,7 @@
     </div>
 
     <div class="bhama-grid">
-      {% if featured_collection.products_count > 0 %}
+      {% if featured_collection != blank and featured_collection.products_count > 0 %}
         {% for product in featured_collection.products limit: 4 %}
           <a class="bhama-card" href="{{ product.url }}">
             <div class="bhama-card-media">
