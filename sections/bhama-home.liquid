@@ -64,7 +64,30 @@
   </div>
 </section>
 
-<section class="bhama-section bhama-section-dark">
+<section class="bhama-section bhama-section-dark" id="bhama-edit">
+  <div class="bhama-container bhama-edit-banner">
+    <div class="bhama-edit-copy">
+      <p class="bhama-eyebrow">Curated by Bhama</p>
+      <h2>The Bhama Edit</h2>
+      <p>A little bit of everything we're loving right now — refreshed every month, never the same collection twice.</p>
+      <a class="bhama-btn bhama-btn-outline" style="color:#fff;border-color:rgba(255,255,255,.5);margin-top:22px;" href="{{ routes.all_products_collection_url }}">Explore The Edit →</a>
+    </div>
+    <div class="bhama-edit-rail">
+      {% assign edit_images = 'bhama-product-woven-vines.jpg|bhama-product-banarasi.jpg|bhama-product-ishani.jpg|bhama-product-zari.jpg|bhama-product-kurthi.jpg|bhama-product-meena.jpg' | split: '|' %}
+      {% assign edit_titles = 'Woven Vines Modal Chanderi Set|Banarasi Soft Silk Saree|Ishani Jamdani Weaving Saree|Premium Soft Silk Zari Weaves Saree|Chettinad Cotton Vel Kurthi|Meena Weaving Birds Saree' | split: '|' %}
+      {% assign edit_prices = 'Rs. 2,499|Rs. 4,899|Rs. 3,600|Rs. 4,900|Rs. 1,499|Rs. 4,299' | split: '|' %}
+      {% for image in edit_images %}
+        <a class="bhama-edit-rail-card" href="{{ routes.all_products_collection_url }}">
+          <span class="bhama-badge bhama-badge-gold">Edit</span>
+          <img src="{{ image | asset_url }}" alt="{{ edit_titles[forloop.index0] }}" width="500" height="650" loading="lazy">
+          <div class="bhama-edit-rail-info"><strong>{{ edit_titles[forloop.index0] }}</strong><span>{{ edit_prices[forloop.index0] }}</span></div>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="bhama-section" id="discover">
   <div class="bhama-container">
     <div class="bhama-heading">
       <div>
@@ -85,6 +108,149 @@
         <img src="{{ 'bhama-collection-accessories.png' | asset_url }}" alt="Accessories" width="800" height="1000">
         <div><h3>Accessories</h3><span>The finishing touches</span></div>
       </a>
+    </div>
+  </div>
+</section>
+
+<section class="bhama-section bhama-section-stone" id="mood">
+  <div class="bhama-container">
+    <div class="bhama-heading">
+      <div>
+        <p class="bhama-eyebrow">How do you want to feel?</p>
+        <h2>Shop By Mood</h2>
+      </div>
+    </div>
+    <div class="bhama-mood-grid">
+      <a class="bhama-mood-card" href="{{ routes.all_products_collection_url }}"><strong>Everyday</strong><span>Easy pieces you'll reach for again.</span></a>
+      <a class="bhama-mood-card" href="{{ routes.all_products_collection_url }}"><strong>Work</strong><span>Polished without trying too hard.</span></a>
+      <a class="bhama-mood-card" href="{{ routes.all_products_collection_url }}"><strong>Weekend</strong><span>Relaxed. Effortless. You.</span></a>
+      <a class="bhama-mood-card" href="{{ routes.all_products_collection_url }}"><strong>Statement</strong><span>For when you want to stand out.</span></a>
+      <a class="bhama-mood-card" href="{{ routes.all_products_collection_url }}"><strong>Evening</strong><span>After-dark dressing.</span></a>
+      <a class="bhama-mood-card" href="{{ routes.all_products_collection_url }}"><strong>Festive</strong><span>Modern takes on tradition.</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="bhama-section" id="occasion">
+  <div class="bhama-container">
+    <div class="bhama-heading">
+      <div>
+        <p class="bhama-eyebrow">Shop by occasion</p>
+        <h2>Dress For The Moment</h2>
+      </div>
+    </div>
+    <div class="bhama-occasion-rail">
+      {% assign occasion_images = 'bhama-product-woven-vines.jpg|bhama-product-banarasi.jpg|bhama-product-ishani.jpg|bhama-product-zari.jpg|bhama-product-kurthi.jpg' | split: '|' %}
+      {% assign occasion_titles = 'Work|Brunch|Weekend|Evening|Festive' | split: '|' %}
+      {% for image in occasion_images %}
+        <a class="bhama-occasion-card" href="{{ routes.all_products_collection_url }}">
+          <img src="{{ image | asset_url }}" alt="{{ occasion_titles[forloop.index0] }} outfits" width="700" height="933" loading="lazy">
+          <strong>{{ occasion_titles[forloop.index0] }}</strong>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="bhama-price-section">
+  <div class="bhama-container">
+    <div class="bhama-heading" style="margin-bottom:20px;">
+      <div>
+        <p class="bhama-eyebrow">Style first, price second</p>
+        <h2 style="font-size:clamp(22px,2.6vw,32px);">Find Your Price Point</h2>
+      </div>
+    </div>
+    <div class="bhama-price-cards">
+      <a href="{{ routes.all_products_collection_url }}"><strong>Under Rs. 999</strong><span>Everyday finds</span></a>
+      <a href="{{ routes.all_products_collection_url }}"><strong>Under Rs. 1,499</strong><span>Easy upgrades</span></a>
+      <a href="{{ routes.all_products_collection_url }}"><strong>Rs. 1,500+</strong><span>Statement pieces</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="bhama-section" id="last-few">
+  <div class="bhama-container">
+    <div class="bhama-heading">
+      <div>
+        <p class="bhama-eyebrow">Beautiful pieces. Limited availability.</p>
+        <h2>Last Few</h2>
+      </div>
+    </div>
+    <div class="bhama-grid">
+      {% assign last_few_images = 'bhama-product-kurthi.jpg|bhama-product-meena.jpg|bhama-product-ishani.jpg|bhama-product-gadwal.jpg' | split: '|' %}
+      {% assign last_few_titles = 'Festival Kurthi Vel Design|Meena Weaving Birds Saree|Ishani Jamdani Weaving Saree|Semi Gadwal Soft Silk Saree' | split: '|' %}
+      {% assign last_few_prices = 'Rs. 1,499|Rs. 4,299|Rs. 3,600|Rs. 2,999' | split: '|' %}
+      {% for image in last_few_images %}
+        <a class="bhama-card" href="{{ routes.all_products_collection_url }}">
+          <div class="bhama-card-media">
+            <span class="bhama-badge bhama-badge-last-few">Last Few</span>
+            <img src="{{ image | asset_url }}" alt="{{ last_few_titles[forloop.index0] }}" width="700" height="933" loading="lazy">
+          </div>
+          <div class="bhama-card-info">
+            <h3>{{ last_few_titles[forloop.index0] }}</h3>
+            <span class="bhama-price">{{ last_few_prices[forloop.index0] }}</span>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="bhama-coming-soon" id="coming-soon">
+  <div class="bhama-container">
+    <p class="bhama-eyebrow">Coming Soon</p>
+    <h2>Something beautiful is on its way.</h2>
+    <p>Get first access to our next drop.</p>
+    {% form 'customer', id: 'ComingSoonForm' %}
+      <input type="hidden" name="contact[tags]" value="newsletter">
+      <div class="bhama-newsletter-form">
+        <input class="bhama-select" type="email" name="contact[email]" placeholder="Enter your email" aria-label="Email" required>
+        <button class="bhama-btn" type="submit" aria-label="Notify me"><i class="bi bi-arrow-right"></i></button>
+      </div>
+      {% if form.posted_successfully? %}<p style="margin-top:12px;color:#dccdb6;">You're on the list.</p>{% endif %}
+    {% endform %}
+  </div>
+</section>
+
+<section class="bhama-section">
+  <div class="bhama-container">
+    <div class="bhama-heading">
+      <div>
+        <p class="bhama-eyebrow">Why Bhama?</p>
+        <h2 style="font-size:clamp(26px,3.4vw,42px);">The Bhama difference</h2>
+      </div>
+    </div>
+    <div class="bhama-why-grid">
+      <div class="bhama-why-card"><i class="bi bi-gem"></i><h3>Curated, Not Crowded</h3><p>We search, select and bring you pieces worth discovering.</p></div>
+      <div class="bhama-why-card"><i class="bi bi-arrow-repeat"></i><h3>Always Evolving</h3><p>Fresh styles and new edits, regularly.</p></div>
+      <div class="bhama-why-card"><i class="bi bi-yin-yang"></i><h3>Contemporary + Traditional</h3><p>Because your wardrobe doesn't have to choose just one.</p></div>
+      <div class="bhama-why-card"><i class="bi bi-award"></i><h3>Chosen With Intention</h3><p>Every piece earns its place in the Bhama edit.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="bhama-newsletter-band">
+  <div class="bhama-container bhama-newsletter-box">
+    <div>
+      <h2>Join The Bhama Circle</h2>
+      <p>Be the first to discover what's new.</p>
+      <div class="bhama-circle-benefits">
+        <span>New drop alerts</span>
+        <span>Private edits</span>
+        <span>Restock notifications</span>
+        <span>Early access</span>
+        <span>Special offers</span>
+      </div>
+    </div>
+    <div>
+      {% form 'customer', id: 'BhamaCircleForm' %}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        <div class="bhama-newsletter-form">
+          <input class="bhama-select" type="email" name="contact[email]" placeholder="Enter your email" aria-label="Email" required>
+          <button class="bhama-btn" type="submit" aria-label="Subscribe"><i class="bi bi-arrow-right"></i></button>
+        </div>
+      {% endform %}
+      <p class="bhama-newsletter-disclaimer">No spam. Just beautiful things worth knowing about.</p>
     </div>
   </div>
 </section>

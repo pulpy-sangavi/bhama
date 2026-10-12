@@ -1157,3 +1157,358 @@ a {
     grid-column: 2;
   }
 }
+
+/* ===== BHAMA Home: Edit rail, Mood, Occasion, Price, Coming Soon, Why, Newsletter ===== */
+.bhama-section-stone {
+  background: var(--bhama-stone);
+}
+
+.bhama-badge-gold {
+  background: var(--bhama-gold);
+  color: var(--bhama-black);
+}
+
+.bhama-badge-last-few {
+  background: var(--bhama-black);
+  color: var(--bhama-gold-soft);
+}
+
+.bhama-edit-banner {
+  display: grid;
+  grid-template-columns: minmax(260px, .9fr) minmax(0, 1.6fr);
+  gap: clamp(28px, 4vw, 56px);
+  align-items: center;
+}
+
+.bhama-edit-copy h2 {
+  margin: 10px 0 14px;
+  font-size: clamp(30px, 3.4vw, 44px);
+}
+
+.bhama-edit-copy p {
+  color: #d9cdbd;
+  line-height: 1.8;
+}
+
+.bhama-edit-rail {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(170px, 1fr);
+  gap: 16px;
+  overflow-x: auto;
+  padding: 4px 2px 10px;
+  scroll-snap-type: x proximity;
+}
+
+.bhama-edit-rail-card {
+  position: relative;
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  scroll-snap-align: start;
+}
+
+.bhama-edit-rail-card img {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  background: var(--bhama-stone);
+  transition: transform .4s ease;
+}
+
+.bhama-edit-rail-card:hover img {
+  transform: scale(1.04);
+}
+
+.bhama-edit-rail-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 10px;
+  color: #fff;
+  font-size: 12px;
+}
+
+.bhama-edit-rail-info span {
+  color: var(--bhama-gold-soft);
+  font-weight: 800;
+}
+
+.bhama-mood-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.bhama-mood-card {
+  display: block;
+  padding: 26px 22px;
+  color: inherit;
+  text-decoration: none;
+  background: #fff;
+  border: 1px solid var(--bhama-line);
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+
+.bhama-mood-card:hover {
+  color: inherit;
+  transform: translateY(-3px);
+  border-color: var(--bhama-black);
+  box-shadow: var(--bhama-shadow-soft);
+}
+
+.bhama-mood-card strong {
+  display: block;
+  margin-bottom: 6px;
+  font-family: var(--bhama-font-display);
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.bhama-mood-card span {
+  color: var(--bhama-muted);
+  font-size: 13px;
+}
+
+.bhama-occasion-rail {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(150px, 1fr);
+  gap: 16px;
+  overflow-x: auto;
+  padding: 4px 2px 10px;
+}
+
+.bhama-occasion-card {
+  display: block;
+  color: var(--bhama-ink);
+  text-decoration: none;
+  text-align: center;
+}
+
+.bhama-occasion-card img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 50%;
+  background: var(--bhama-stone);
+  transition: transform .3s ease, box-shadow .3s ease;
+}
+
+.bhama-occasion-card:hover img {
+  transform: scale(1.04);
+  box-shadow: var(--bhama-shadow-soft);
+}
+
+.bhama-occasion-card strong {
+  display: block;
+  margin-top: 12px;
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+
+.bhama-price-section {
+  padding: clamp(36px, 4vw, 56px) 0;
+  background: var(--bhama-ivory);
+}
+
+.bhama-price-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.bhama-price-cards a {
+  display: block;
+  padding: 22px;
+  text-align: center;
+  color: inherit;
+  text-decoration: none;
+  background: #fff;
+  border: 1px solid var(--bhama-line);
+  border-top: 2px solid var(--bhama-gold);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.bhama-price-cards a:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--bhama-shadow-soft);
+}
+
+.bhama-price-cards strong {
+  display: block;
+  margin-bottom: 6px;
+  font-family: var(--bhama-font-display);
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.bhama-price-cards span {
+  color: var(--bhama-muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .6px;
+  text-transform: uppercase;
+}
+
+.bhama-coming-soon {
+  padding: clamp(56px, 8vw, 100px) 0;
+  text-align: center;
+  color: #fff;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(199, 164, 91, .14), transparent 55%),
+    var(--bhama-black);
+}
+
+.bhama-coming-soon .bhama-eyebrow {
+  color: var(--bhama-gold-soft);
+}
+
+.bhama-coming-soon h2 {
+  margin: 0 auto 14px;
+  max-width: 680px;
+  font-family: var(--bhama-font-display);
+  font-size: clamp(32px, 5vw, 54px);
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.bhama-coming-soon > .bhama-container > p {
+  max-width: 440px;
+  margin: 0 auto 26px;
+  color: #d9cdbd;
+}
+
+.bhama-newsletter-form {
+  display: flex;
+  max-width: 420px;
+  margin: 0 auto;
+  border: 1px solid rgba(199, 164, 91, .4);
+}
+
+.bhama-newsletter-form .bhama-select {
+  flex: 1;
+  border: 0;
+  background: transparent;
+  color: inherit;
+}
+
+.bhama-newsletter-form .bhama-btn {
+  border-radius: 0;
+}
+
+.bhama-why-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+.bhama-why-card {
+  padding: 28px 22px;
+  background: #fff;
+  border: 1px solid var(--bhama-line);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.bhama-why-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--bhama-shadow-soft);
+}
+
+.bhama-why-card i {
+  color: var(--bhama-red);
+  font-size: 26px;
+}
+
+.bhama-why-card h3 {
+  margin: 14px 0 8px;
+  font-family: var(--bhama-font-display);
+  font-size: 19px;
+  font-weight: 600;
+}
+
+.bhama-why-card p {
+  margin: 0;
+  color: var(--bhama-muted);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.bhama-newsletter-band {
+  padding: clamp(40px, 5vw, 64px) 0;
+  color: #fff;
+  background: linear-gradient(120deg, #1c1310, #2a1a14);
+}
+
+.bhama-newsletter-box {
+  display: grid;
+  grid-template-columns: 1.1fr .9fr;
+  gap: clamp(24px, 4vw, 56px);
+  align-items: center;
+}
+
+.bhama-newsletter-box h2 {
+  margin: 0 0 8px;
+  font-family: var(--bhama-font-display);
+  font-size: clamp(26px, 3vw, 36px);
+  font-weight: 600;
+}
+
+.bhama-newsletter-box > div:first-child p {
+  margin: 0 0 16px;
+  color: #e7d9c8;
+}
+
+.bhama-circle-benefits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.bhama-circle-benefits span {
+  padding: 7px 12px;
+  color: #f3e6d4;
+  background: rgba(255, 255, 255, .08);
+  border: 1px solid rgba(255, 255, 255, .16);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .3px;
+}
+
+.bhama-newsletter-disclaimer {
+  margin: 10px 0 0;
+  color: #c9bba9;
+  font-size: 11px;
+}
+
+@media (max-width: 991px) {
+  .bhama-edit-banner {
+    grid-template-columns: 1fr;
+  }
+
+  .bhama-mood-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .bhama-why-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .bhama-newsletter-box {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .bhama-price-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .bhama-mood-grid,
+  .bhama-why-grid {
+    grid-template-columns: 1fr;
+  }
+}
