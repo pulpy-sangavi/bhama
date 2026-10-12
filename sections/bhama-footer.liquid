@@ -30,13 +30,16 @@
       <p>New drops, private edits and restock notes straight to your inbox.</p>
       {% form 'customer' %}
         <input type="hidden" name="contact[tags]" value="newsletter">
-        <input class="bhama-select" type="email" name="contact[email]" placeholder="Enter your email" required>
-        <button class="bhama-btn" type="submit" style="margin-top:10px;width:100%;">Subscribe</button>
+        <div class="bhama-newsletter">
+          <input class="bhama-input" type="email" name="contact[email]" placeholder="Enter your email" required>
+          <button class="bhama-btn" type="submit">Subscribe</button>
+        </div>
       {% endform %}
     </div>
   </div>
   <div class="bhama-container bhama-footer-bottom">
-    &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.
+    <span>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.</span>
+    <span>Curated in India</span>
   </div>
 </footer>
 

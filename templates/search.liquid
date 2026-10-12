@@ -1,18 +1,27 @@
-<section class="bhama-section">
+<section class="bhama-page-hero">
   <div class="bhama-container">
-    <div class="bhama-heading">
-      <div>
-        <p class="bhama-eyebrow">Search</p>
-        <h2>Search BHAMA</h2>
-      </div>
-    </div>
+    <p class="bhama-eyebrow">Search</p>
+    <h1>Find your next edit</h1>
+    <p>Search sarees, suit sets, kurthis and festive occasion pieces from the BHAMA catalogue.</p>
+  </div>
+</section>
 
-    <form action="{{ routes.search_url }}" method="get" role="search" style="margin-bottom:28px;">
-      <input class="bhama-select" type="search" name="q" value="{{ search.terms | escape }}" placeholder="Search products">
-      <button class="bhama-btn" type="submit" style="margin-top:10px;">Search</button>
+<section class="bhama-section" style="padding-top:0;">
+  <div class="bhama-container">
+    <form class="bhama-search-panel bhama-search-form" action="{{ routes.search_url }}" method="get" role="search">
+      <input class="bhama-input" type="search" name="q" value="{{ search.terms | escape }}" placeholder="Search products, fabrics, occasions">
+      <button class="bhama-btn" type="submit">Search</button>
     </form>
 
     {% if search.performed %}
+      <p class="bhama-search-meta">
+        {% if search.results_count == 0 %}
+          No results for "{{ search.terms }}".
+        {% else %}
+          Showing {{ search.results_count }} result{% unless search.results_count == 1 %}s{% endunless %} for "{{ search.terms }}".
+        {% endif %}
+      </p>
+
       <div class="bhama-grid">
         {% for item in search.results %}
           {% if item.object_type == 'product' %}
@@ -29,8 +38,17 @@
             </a>
           {% endif %}
         {% else %}
-          <p>No results found.</p>
+          <div class="bhama-empty-state">
+            <h2>No products found</h2>
+            <p>Try searching for saree, silk, suit set, kurthi or festive.</p>
+            <a class="bhama-btn" href="{{ routes.collections_url }}">Browse collections</a>
+          </div>
         {% endfor %}
+      </div>
+    {% else %}
+      <div class="bhama-empty-state" style="margin-top:24px;">
+        <h2>What are you looking for?</h2>
+        <p>Use the search bar above to explore the full BHAMA catalogue.</p>
       </div>
     {% endif %}
   </div>

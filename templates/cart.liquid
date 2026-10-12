@@ -1,41 +1,48 @@
-<section class="bhama-section">
+<section class="bhama-page-hero">
   <div class="bhama-container">
-    <div class="bhama-heading">
-      <div>
-        <p class="bhama-eyebrow">Shopping Bag</p>
-        <h2>Your cart</h2>
-      </div>
-    </div>
+    <p class="bhama-eyebrow">Shopping Bag</p>
+    <h1>Your cart</h1>
+    <p>{{ cart.item_count }} item{% unless cart.item_count == 1 %}s{% endunless %} selected for checkout.</p>
+  </div>
+</section>
 
+<section class="bhama-section" style="padding-top:0;">
+  <div class="bhama-container">
     {% if cart.item_count > 0 %}
       <form action="{{ routes.cart_url }}" method="post" novalidate>
-        <div class="bhama-product-info">
+        <div class="bhama-cart-panel">
           {% for item in cart.items %}
-            <div style="display:grid;grid-template-columns:90px 1fr auto;gap:16px;align-items:center;padding:14px 0;border-bottom:1px solid var(--bhama-line);">
+            <div class="bhama-cart-row">
               {% if item.image %}
-                {{ item.image | image_url: width: 180 | image_tag: loading: 'lazy', alt: item.product.title, width: 90, height: 120 }}
+                {{ item.image | image_url: width: 220 | image_tag: loading: 'lazy', alt: item.product.title, width: 96, height: 128 }}
               {% endif %}
               <div>
                 <strong>{{ item.product.title }}</strong>
-                <p style="margin:4px 0;color:var(--bhama-muted);">{{ item.variant.title }}</p>
-                <input class="bhama-quantity" style="max-width:100px;" type="number" name="updates[]" value="{{ item.quantity }}" min="0">
+                {% unless item.variant.title == 'Default Title' %}
+                  <p>{{ item.variant.title }}</p>
+                {% endunless %}
+                <input class="bhama-input" style="max-width:110px;" type="number" name="updates[]" value="{{ item.quantity }}" min="0" aria-label="Quantity for {{ item.product.title | escape }}">
               </div>
               <strong>{{ item.final_line_price | money }}</strong>
             </div>
           {% endfor %}
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:22px;">
-            <strong>Subtotal</strong>
-            <strong class="bhama-product-price">{{ cart.total_price | money }}</strong>
-          </div>
-          <div class="bhama-btn-row" style="margin-top:18px;">
-            <button class="bhama-btn bhama-btn-outline" type="submit" name="update">Update cart</button>
-            <button class="bhama-btn" type="submit" name="checkout">Checkout</button>
+
+          <div class="bhama-cart-summary">
+            <div>
+              <p class="bhama-eyebrow">Subtotal</p>
+              <strong class="bhama-product-price">{{ cart.total_price | money }}</strong>
+            </div>
+            <div class="bhama-btn-row">
+              <button class="bhama-btn bhama-btn-outline" type="submit" name="update">Update cart</button>
+              <button class="bhama-btn" type="submit" name="checkout">Checkout</button>
+            </div>
           </div>
         </div>
       </form>
     {% else %}
-      <div class="bhama-product-info">
-        <p>Your cart is empty.</p>
+      <div class="bhama-empty-state">
+        <h2>Your bag is empty</h2>
+        <p>Browse the latest BHAMA pieces and add your favourites.</p>
         <a class="bhama-btn" href="{{ routes.collections_url }}">Continue shopping</a>
       </div>
     {% endif %}

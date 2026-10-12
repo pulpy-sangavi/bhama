@@ -1,15 +1,17 @@
-<section class="bhama-section">
+<section class="bhama-page-hero">
   <div class="bhama-container">
-    <div class="bhama-heading">
-      <div>
-        <p class="bhama-eyebrow">Shop</p>
-        <h2>{{ collection.title | default: 'All Products' }}</h2>
-        {% if collection.description != blank %}
-          <p>{{ collection.description | strip_html | truncate: 160 }}</p>
-        {% endif %}
-      </div>
-    </div>
+    <p class="bhama-eyebrow">Shop</p>
+    <h1>{{ collection.title | default: 'All Products' }}</h1>
+    {% if collection.description != blank %}
+      <p>{{ collection.description | strip_html | truncate: 160 }}</p>
+    {% else %}
+      <p>Curated pieces for festive days, wedding moments and elegant everyday dressing.</p>
+    {% endif %}
+  </div>
+</section>
 
+<section class="bhama-section" style="padding-top:0;">
+  <div class="bhama-container">
     {% paginate collection.products by section.settings.products_per_page %}
       <div class="bhama-grid">
         {% for product in collection.products %}
@@ -32,7 +34,10 @@
             </div>
           </a>
         {% else %}
-          <p>No products found in this collection yet.</p>
+          <div class="bhama-empty-state">
+            <h2>No products yet</h2>
+            <p>Add products to this collection in Shopify admin.</p>
+          </div>
         {% endfor %}
       </div>
 

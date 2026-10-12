@@ -1,33 +1,46 @@
-<section class="bhama-section">
+<section class="bhama-page-hero">
   <div class="bhama-container">
-    <div class="bhama-heading">
-      <div>
-        <p class="bhama-eyebrow">Shop</p>
-        <h2>{{ section.settings.heading | default: 'All Collections' }}</h2>
-        {% if section.settings.subtext != blank %}
-          <p>{{ section.settings.subtext }}</p>
-        {% endif %}
-      </div>
-    </div>
+    <p class="bhama-eyebrow">Shop</p>
+    <h1>{{ section.settings.heading | default: 'All Collections' }}</h1>
+    {% if section.settings.subtext != blank %}
+      <p>{{ section.settings.subtext }}</p>
+    {% endif %}
+  </div>
+</section>
 
+<section class="bhama-section" style="padding-top:0;">
+  <div class="bhama-container">
     <div class="bhama-collection-grid bhama-collection-list-grid">
-      {% for collection in collections %}
-        {% unless section.settings.hide_empty and collection.products_count == 0 %}
-          <a class="bhama-collection-tile" href="{{ collection.url }}">
-            {% if collection.featured_image %}
-              {{ collection.featured_image | image_url: width: 800 | image_tag: loading: 'lazy', alt: collection.title, width: 800, height: 1000 }}
-            {% elsif collection.products.first.featured_image %}
-              {{ collection.products.first.featured_image | image_url: width: 800 | image_tag: loading: 'lazy', alt: collection.title, width: 800, height: 1000 }}
-            {% endif %}
+      {% if collections.size > 1 %}
+        {% for collection in collections %}
+          {% unless section.settings.hide_empty and collection.products_count == 0 %}
+            <a class="bhama-collection-tile" href="{{ collection.url }}">
+              {% if collection.featured_image %}
+                {{ collection.featured_image | image_url: width: 800 | image_tag: loading: 'lazy', alt: collection.title, width: 800, height: 1000 }}
+              {% elsif collection.products.first.featured_image %}
+                {{ collection.products.first.featured_image | image_url: width: 800 | image_tag: loading: 'lazy', alt: collection.title, width: 800, height: 1000 }}
+              {% endif %}
+              <div>
+                <h3>{{ collection.title }}</h3>
+                <span>{{ collection.products_count }} product{% unless collection.products_count == 1 %}s{% endunless %}</span>
+              </div>
+            </a>
+          {% endunless %}
+        {% endfor %}
+      {% else %}
+        {% assign fallback_titles = 'Sarees|Suit Sets|Kurthis|Co-ord Sets' | split: '|' %}
+        {% assign fallback_subtitles = 'Soft silk, Jamdani and festive zari edits|Elegant occasion sets with dupatta|Comfort-first festive and everyday silhouettes|Modern separates with Indian craft details' | split: '|' %}
+        {% assign fallback_images = 'bhama-product-zari.jpg|bhama-product-woven-vines.jpg|bhama-product-kurthi.jpg|bhama-collection-fusion.png' | split: '|' %}
+        {% for title in fallback_titles %}
+          <a class="bhama-collection-tile" href="{{ routes.all_products_collection_url }}">
+            <img src="{{ fallback_images[forloop.index0] | asset_url }}" alt="{{ title | escape }}" width="800" height="1000" loading="lazy">
             <div>
-              <h3>{{ collection.title }}</h3>
-              <span>{{ collection.products_count }} product{% unless collection.products_count == 1 %}s{% endunless %}</span>
+              <h3>{{ title }}</h3>
+              <span>{{ fallback_subtitles[forloop.index0] }}</span>
             </div>
           </a>
-        {% endunless %}
-      {% else %}
-        <p>No collections yet. Create one in Shopify admin to see it here.</p>
-      {% endfor %}
+        {% endfor %}
+      {% endif %}
     </div>
   </div>
 </section>
