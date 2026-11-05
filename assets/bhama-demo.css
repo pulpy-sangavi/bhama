@@ -4215,6 +4215,39 @@ h2,
   margin-top: 16px;
 }
 
+.template-product .product-trust {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
+  margin: 18px 0;
+  border: 1px solid var(--line);
+  background: #faf9f6;
+}
+
+.template-product .product-trust span {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 12px;
+  color: var(--ink);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .35px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.template-product .product-trust span + span {
+  border-left: 1px solid var(--line);
+}
+
+.template-product .product-trust i {
+  font-size: 16px;
+  color: var(--red);
+}
+
 @media (max-width: 991px) {
   .template-collection .shop-layout,
   .template-product .product-page {
