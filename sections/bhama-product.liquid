@@ -85,16 +85,15 @@
           {%- endfor -%}
         {%- endunless -%}
 
-        <div class="option-row quantity-control">
-          <label for="BhamaQuantity-{{ section.id }}">Quantity</label>
-          <div class="quantity-stepper">
-            <button type="button" data-bhama-qty-minus aria-label="Decrease quantity">&minus;</button>
-            <input id="BhamaQuantity-{{ section.id }}" type="number" name="quantity" value="1" min="1" inputmode="numeric" aria-label="Quantity" data-bhama-qty>
-            <button type="button" data-bhama-qty-plus aria-label="Increase quantity">&plus;</button>
-          </div>
-        </div>
-
         <div class="buy-buttons">
+          <div class="quantity-control quantity-control-inline">
+            <label for="BhamaQuantity-{{ section.id }}">Quantity</label>
+            <div class="quantity-stepper">
+              <button type="button" data-bhama-qty-minus aria-label="Decrease quantity">&minus;</button>
+              <input id="BhamaQuantity-{{ section.id }}" type="number" name="quantity" value="1" min="1" inputmode="numeric" aria-label="Quantity" data-bhama-qty>
+              <button type="button" data-bhama-qty-plus aria-label="Increase quantity">&plus;</button>
+            </div>
+          </div>
           <button class="btn btn-red" type="submit" name="add" data-bhama-add {% unless current_variant.available %}disabled{% endunless %}><span data-bhama-add-label>{% if current_variant.available %}Add to Cart{% else %}Sold Out{% endif %}</span></button>
           <button class="btn btn-outline" type="button" data-bhama-buy-now {% unless current_variant.available %}disabled{% endunless %}>Buy Now</button>
         </div>

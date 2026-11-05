@@ -4031,6 +4031,22 @@ h2,
   background: var(--white);
 }
 
+.template-product .quantity-control-inline {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.template-product .quantity-control-inline label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .6px;
+  text-transform: uppercase;
+}
+
 .template-product .quantity-stepper button,
 .template-product .quantity-stepper input {
   border: 0;
@@ -4156,7 +4172,8 @@ h2,
 }
 
 .template-product .buy-buttons {
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 128px 1fr 1fr;
+  align-items: end;
 }
 
 .template-product .buy-buttons .btn {
