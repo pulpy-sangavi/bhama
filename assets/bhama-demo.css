@@ -3876,6 +3876,17 @@ h2,
   font-weight: 600;
 }
 
+.template-product .product-short-description {
+  max-width: 520px;
+  margin: 16px 0 0;
+  color: var(--muted);
+  line-height: 1.75;
+}
+
+.template-product .product-copy .eyebrow {
+  margin-bottom: 8px;
+}
+
 .template-product .product-copy .price {
   padding-bottom: 18px;
   border-bottom: 1px solid var(--line);

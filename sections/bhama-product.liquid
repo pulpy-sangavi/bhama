@@ -52,21 +52,16 @@
 
     <article class="product-copy">
       <p class="eyebrow dark">{{ product.type | default: product.vendor | default: 'The Bhama Edit' }}</p>
-      <div class="product-rating-row">
-        <div class="rating" aria-label="4.5 out of 5 stars"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i></div>
-        <span>Verified customer favourite</span>
-      </div>
       <h1>{{ product.title }}</h1>
-      <p class="product-tagline">{{ section.settings.fallback_description }}</p>
       <span class="price">
         <span data-bhama-price>{{ current_variant.price | money }}</span>
         <span class="old-price{% unless current_variant.compare_at_price > current_variant.price %} is-hidden{% endunless %}" data-bhama-compare>{% if current_variant.compare_at_price > current_variant.price %}{{ current_variant.compare_at_price | money }}{% endif %}</span>
         <span class="stock-note{% unless current_variant.available %} is-sold-out{% endunless %}" data-bhama-stock>{% if current_variant.available %}In stock{% else %}Sold out{% endif %}</span>
       </span>
       {%- if product.description != blank -%}
-        <p>{{ product.description | strip_html | truncatewords: 40 }}</p>
+        <p class="product-short-description">{{ product.description | strip_html | truncatewords: 34 }}</p>
       {%- else -%}
-        <p>{{ section.settings.fallback_description }}</p>
+        <p class="product-short-description">{{ section.settings.fallback_description }}</p>
       {%- endif -%}
 
       <div class="product-trust">
