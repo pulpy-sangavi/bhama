@@ -10,33 +10,51 @@
   <div class="bhama-container">
     {% if cart.item_count > 0 %}
       <form action="{{ routes.cart_url }}" method="post" novalidate>
-        <div class="bhama-cart-panel">
-          {% for item in cart.items %}
-            <div class="bhama-cart-row">
-              {% if item.image %}
-                {{ item.image | image_url: width: 220 | image_tag: loading: 'lazy', alt: item.product.title, width: 96, height: 128 }}
-              {% endif %}
-              <div>
-                <strong>{{ item.product.title }}</strong>
-                {% unless item.variant.title == 'Default Title' %}
-                  <p>{{ item.variant.title }}</p>
-                {% endunless %}
-                <input class="bhama-input" style="max-width:110px;" type="number" name="updates[]" value="{{ item.quantity }}" min="0" aria-label="Quantity for {{ item.product.title | escape }}">
+        <div class="bhama-cart-layout">
+          <div class="bhama-cart-panel bhama-cart-items">
+            <div class="bhama-cart-heading">
+              <span>Product</span>
+              <span>Total</span>
+            </div>
+            {% for item in cart.items %}
+              <div class="bhama-cart-row">
+                <a class="bhama-cart-image" href="{{ item.url }}">
+                  {% if item.image %}
+                    {{ item.image | image_url: width: 240 | image_tag: loading: 'lazy', alt: item.product.title, width: 110, height: 148 }}
+                  {% endif %}
+                </a>
+                <div class="bhama-cart-details">
+                  <a href="{{ item.url }}"><strong>{{ item.product.title }}</strong></a>
+                  {% unless item.variant.title == 'Default Title' %}
+                    <p>{{ item.variant.title }}</p>
+                  {% endunless %}
+                  <div class="bhama-cart-line-actions">
+                    <div class="bhama-cart-quantity">
+                      <button type="button" data-cart-minus aria-label="Decrease quantity">&minus;</button>
+                      <input type="number" name="updates[]" value="{{ item.quantity }}" min="0" aria-label="Quantity for {{ item.product.title | escape }}">
+                      <button type="button" data-cart-plus aria-label="Increase quantity">&plus;</button>
+                    </div>
+                    <a class="bhama-cart-remove" href="{{ item.url_to_remove }}">Remove</a>
+                  </div>
+                </div>
+                <strong class="bhama-cart-line-price">{{ item.final_line_price | money }}</strong>
               </div>
-              <strong>{{ item.final_line_price | money }}</strong>
-            </div>
-          {% endfor %}
-
-          <div class="bhama-cart-summary">
-            <div>
-              <p class="bhama-eyebrow">Subtotal</p>
-              <strong class="bhama-product-price">{{ cart.total_price | money }}</strong>
-            </div>
-            <div class="bhama-btn-row">
-              <button class="bhama-btn bhama-btn-outline" type="submit" name="update">Update cart</button>
-              <button class="bhama-btn" type="submit" name="checkout">Checkout</button>
-            </div>
+            {% endfor %}
           </div>
+
+          <aside class="bhama-cart-panel bhama-cart-summary">
+            <p class="bhama-eyebrow">Order Summary</p>
+            <div class="bhama-summary-total">
+              <span>Subtotal</span>
+              <strong>{{ cart.total_price | money }}</strong>
+            </div>
+            <p class="bhama-cart-tax-note">Taxes and shipping calculated at checkout.</p>
+            <div class="bhama-cart-actions">
+              <button class="bhama-btn bhama-btn-outline" type="submit" name="update">Update cart</button>
+              <button class="bhama-btn bhama-cart-checkout" type="submit" name="checkout">Secure checkout</button>
+            </div>
+            <a class="bhama-cart-continue" href="{{ routes.all_products_collection_url }}">Continue shopping</a>
+          </aside>
         </div>
       </form>
     {% else %}

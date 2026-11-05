@@ -139,6 +139,16 @@ $(function () {
 
 });
 document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.bhama-cart-quantity').forEach((stepper) => {
+    const input = stepper.querySelector('input');
+    stepper.querySelector('[data-cart-minus]')?.addEventListener('click', () => {
+      input.value = Math.max(0, Number(input.value || 0) - 1);
+    });
+    stepper.querySelector('[data-cart-plus]')?.addEventListener('click', () => {
+      input.value = Number(input.value || 0) + 1;
+    });
+  });
+
   const reviewButton = document.querySelector('[data-bhama-write-review]');
   if (reviewButton) {
     reviewButton.addEventListener('click', () => {
