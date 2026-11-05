@@ -3826,6 +3826,8 @@ h2,
 }
 
 .template-collection .filters {
+  position: -webkit-sticky;
+  position: sticky;
   top: 112px;
   max-height: calc(100vh - 132px);
   padding: 0;
