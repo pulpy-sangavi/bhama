@@ -1,52 +1,76 @@
-<section class="bhama-page-hero">
-  <div class="bhama-container">
-    <p class="bhama-eyebrow">Shop</p>
-    <h1>{{ collection.title | default: 'All Products' }}</h1>
-    {% if collection.description != blank %}
-      <p>{{ collection.description | strip_html | truncate: 160 }}</p>
-    {% else %}
-      <p>Curated pieces for festive days, wedding moments and elegant everyday dressing.</p>
-    {% endif %}
+{%- liquid
+  assign c = routes.collections_url
+  assign all_url = routes.all_products_collection_url
+-%}
+
+<div class="category-strip">
+  <div class="container-fluid category-strip-inner">
+    <a href="{{ all_url }}">New In</a>
+    <a href="{{ c }}/sarees">Sarees</a>
+    <a href="{{ c }}/kurtas">Kurtas</a>
+    <a href="{{ c }}/dresses">Dresses</a>
+    <a href="{{ c }}/co-ords">Co-ords</a>
+    <a href="{{ c }}/jewellery">Jewellery</a>
+    <a href="{{ routes.root_url }}#last-few">Last Few</a>
+    <a href="{{ c }}/sale">Sale</a>
+  </div>
+</div>
+
+<section class="page-hero">
+  <div class="container-fluid">
+    <p class="eyebrow">Shop</p>
+    <h1>{% if collection.handle == 'all' or collection.title == blank %}New In{% else %}{{ collection.title }}{% endif %}</h1>
+    {%- if collection.description != blank -%}
+      <p>{{ collection.description | strip_html | truncate: 180 }}</p>
+    {%- else -%}
+      <p>Fresh finds, limited pieces, and a curated mix of contemporary fashion, traditional drapes, and accessories.</p>
+    {%- endif -%}
   </div>
 </section>
 
-<section class="bhama-section" style="padding-top:0;">
-  <div class="bhama-container">
-    {% paginate collection.products by section.settings.products_per_page %}
-      <div class="bhama-grid">
-        {% for product in collection.products %}
-          <a class="bhama-card" href="{{ product.url }}">
-            <div class="bhama-card-media">
-              {% if product.compare_at_price > product.price %}
-                <span class="bhama-badge">Sale</span>
-              {% else %}
-                <span class="bhama-badge">New</span>
-              {% endif %}
-              {% if product.featured_image %}
-                {{ product.featured_image | image_url: width: 700 | image_tag: loading: 'lazy', alt: product.title, width: 700, height: 933 }}
-              {% else %}
-                <img src="{{ 'bhama-product-woven-vines.jpg' | asset_url }}" alt="{{ product.title | escape }}" width="700" height="933">
-              {% endif %}
-            </div>
-            <div class="bhama-card-info">
-              <h3>{{ product.title }}</h3>
-              <span class="bhama-price">{{ product.price | money }}</span>
-            </div>
-          </a>
-        {% else %}
-          <div class="bhama-empty-state">
-            <h2>No products yet</h2>
-            <p>Add products to this collection in Shopify admin.</p>
-          </div>
-        {% endfor %}
-      </div>
+<section class="section section-ivory">
+  <div class="container-fluid shop-layout">
+    <aside class="filters">
+      <h2>Filter</h2>
+      <div class="filter-group"><strong>Shop</strong><a href="{{ all_url }}">New In</a><a href="{{ c }}/contemporary">Contemporary</a><a href="{{ c }}/traditional">Traditional</a><a href="{{ c }}/accessories">Accessories</a><a href="{{ routes.root_url }}#bhama-edit">The Bhama Edit</a><a href="{{ c }}/sale">Sale</a></div>
+      <div class="filter-group"><strong>Traditional</strong><a href="{{ c }}/sarees">Sarees</a><a href="{{ c }}/kurtas">Kurtas</a><a href="{{ c }}/dupattas">Dupattas</a><a href="{{ c }}/sets">Sets</a><a href="{{ c }}/blouses">Blouses</a></div>
+      <div class="filter-group"><strong>Bhama Mood</strong><a href="{{ all_url }}">Effortless</a><a href="{{ all_url }}">Statement</a><a href="{{ all_url }}">Festive</a><a href="{{ all_url }}">After Dark</a></div>
+    </aside>
 
-      {% if paginate.pages > 1 %}
-        <div style="margin-top:34px;text-align:center;">
-          {{ paginate | default_pagination }}
+    <div>
+      {% paginate collection.products by section.settings.products_per_page %}
+        <div class="shop-toolbar" id="new-in">
+          <p>Showing {{ collection.products_count }} product{% unless collection.products_count == 1 %}s{% endunless %} in {{ collection.title | default: 'Just Dropped' }}</p>
+          <select aria-label="Sort products" onchange="var u=new URL(window.location.href);u.searchParams.set('sort_by',this.value);window.location=u.toString();">
+            {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
+            <option value="created-descending"{% if sort_by == 'created-descending' %} selected{% endif %}>Sort by: Newest</option>
+            <option value="price-ascending"{% if sort_by == 'price-ascending' %} selected{% endif %}>Price: Low to High</option>
+            <option value="price-descending"{% if sort_by == 'price-descending' %} selected{% endif %}>Price: High to Low</option>
+          </select>
         </div>
-      {% endif %}
-    {% endpaginate %}
+        <div class="product-grid">
+          {%- for product in collection.products -%}
+            {%- liquid
+              assign badge = 'New'
+              assign badge_class = blank
+              if product.compare_at_price > product.price
+                assign badge = 'Sale'
+              endif
+              assign stock = product.type
+              if product.available == false
+                assign stock = 'Sold out'
+              endif
+            -%}
+            {% render 'bhama-product-card', product: product, badge: badge, badge_class: badge_class, quick_label: 'View Product', stock: stock %}
+          {%- else -%}
+            <p class="empty-state">No products in this collection yet.</p>
+          {%- endfor -%}
+        </div>
+        {%- if paginate.pages > 1 -%}
+          <div style="margin-top:34px;text-align:center;">{{ paginate | default_pagination }}</div>
+        {%- endif -%}
+      {% endpaginate %}
+    </div>
   </div>
 </section>
 

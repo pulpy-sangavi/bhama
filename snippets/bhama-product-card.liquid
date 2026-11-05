@@ -1,0 +1,49 @@
+{%- comment -%}
+  Demo06 product card.
+  Accepts:
+  - product: Shopify product (optional; falls back to the static values below)
+  - url, title, image, price, old_price, stock: static fallbacks
+  - badge, badge_class: optional badge text and extra class (e.g. 'gold', 'last-few')
+  - quick_label: hover label (default 'Quick View'); pass 'none' to hide it
+  - show_compare: show compare-at price for real products
+  - id: optional element id
+{%- endcomment -%}
+{%- liquid
+  assign card_quick = quick_label | default: 'Quick View'
+  if product != blank
+    assign card_url = product.url
+    assign card_title = product.title
+    assign card_price = product.price | money
+    if show_compare and product.compare_at_price_max > product.price
+      assign card_old_price = product.compare_at_price_max | money
+    else
+      assign card_old_price = blank
+    endif
+  else
+    assign card_url = url | default: routes.all_products_collection_url
+    assign card_title = title
+    assign card_price = price
+    assign card_old_price = old_price
+  endif
+-%}
+<a class="product-card" href="{{ card_url }}"{% if id != blank %} id="{{ id }}"{% endif %}>
+  <div class="product-media">
+    {%- if badge != blank -%}<span class="badge{% if badge_class != blank %} {{ badge_class }}{% endif %}">{{ badge }}</span>{%- endif -%}
+    {%- if product != blank and product.featured_image -%}
+      {{ product.featured_image | image_url: width: 700 | image_tag: loading: 'lazy', alt: product.featured_image.alt | default: product.title }}
+    {%- elsif product != blank -%}
+      <img src="{{ 'bhama-product-woven-vines.jpg' | asset_url }}" alt="{{ card_title | escape }}" loading="lazy">
+    {%- else -%}
+      <img src="{{ image }}" alt="{{ card_title | escape }}" loading="lazy">
+    {%- endif -%}
+    {%- unless card_quick == 'none' -%}<span class="quick-add">{{ card_quick }}</span>{%- endunless -%}
+  </div>
+  <div class="product-info">
+    <h3>{{ card_title }}</h3>
+    <div class="product-meta">
+      <span class="price">{{ card_price }}</span>
+      {%- if card_old_price != blank -%}<span class="old-price">{{ card_old_price }}</span>{%- endif -%}
+      {%- if stock != blank -%}<span class="stock">{{ stock }}</span>{%- endif -%}
+    </div>
+  </div>
+</a>

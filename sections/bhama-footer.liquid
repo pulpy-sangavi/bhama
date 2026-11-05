@@ -1,45 +1,66 @@
-<footer class="bhama-footer">
-  <div class="bhama-container bhama-footer-grid">
+{%- liquid
+  assign home_url = routes.root_url
+  if routes.root_url == '/'
+    assign home_url = ''
+  endif
+  assign instagram_url = settings.instagram_url | default: 'https://www.instagram.com/labelbhama/'
+  assign whatsapp_url = settings.whatsapp_url | default: 'https://wa.me/'
+-%}
+
+<footer class="site-footer">
+  <div class="container-fluid footer-main">
     <div>
-      {% if section.settings.logo != blank %}
-        {{ section.settings.logo | image_url: width: 280 | image_tag: loading: 'lazy', alt: shop.name, width: 132, height: 48 }}
-      {% else %}
-        <img src="{{ 'bhama-logo.png' | asset_url }}" alt="{{ shop.name }}" width="132" height="48">
-      {% endif %}
+      <a class="logo-link footer-logo" href="{{ routes.root_url }}">
+        {%- if section.settings.logo != blank -%}
+          {{ section.settings.logo | image_url: width: 320 | image_tag: loading: 'lazy', alt: shop.name }}
+        {%- else -%}
+          <img src="{{ 'bhama-logo.png' | asset_url }}" alt="{{ shop.name }}" loading="lazy">
+        {%- endif -%}
+      </a>
       <p>{{ section.settings.copy }}</p>
     </div>
-
     <div>
       <h3>Shop</h3>
-      <a href="{{ routes.collections_url }}">New In</a>
-      <a href="{{ routes.collections_url }}">Sarees</a>
-      <a href="{{ routes.collections_url }}">Suit Sets</a>
-      <a href="{{ routes.collections_url }}">The Bhama Edit</a>
+      <a href="{{ routes.all_products_collection_url }}">New In</a>
+      <a href="{{ routes.collections_url }}/contemporary">Contemporary</a>
+      <a href="{{ routes.collections_url }}/traditional">Traditional</a>
+      <a href="{{ routes.collections_url }}/accessories">Accessories</a>
+      <a href="{{ home_url }}/#bhama-edit">The Bhama Edit</a>
     </div>
-
+    <div>
+      <h3>Discover</h3>
+      <a href="{{ home_url }}/#mood">Shop by Mood</a>
+      <a href="{{ home_url }}/#occasion">Shop by Occasion</a>
+      <a href="{{ home_url }}/#last-few">Last Few</a>
+      <a href="{{ home_url }}/#coming-soon">Coming Soon</a>
+    </div>
     <div>
       <h3>Help</h3>
-      <a href="{{ routes.cart_url }}">Cart</a>
-      <a href="{{ routes.search_url }}">Search</a>
-      <a href="/pages/contact">Contact</a>
-      <a href="/policies/shipping-policy">Shipping</a>
-    </div>
-
-    <div>
-      <h3>Join The Bhama Circle</h3>
-      <p>New drops, private edits and restock notes straight to your inbox.</p>
-      {% form 'customer' %}
-        <input type="hidden" name="contact[tags]" value="newsletter">
-        <div class="bhama-newsletter">
-          <input class="bhama-input" type="email" name="contact[email]" placeholder="Enter your email" required>
-          <button class="bhama-btn" type="submit">Subscribe</button>
-        </div>
-      {% endform %}
+      <a href="/pages/about">About Bhama</a>
+      <a href="/pages/contact">Contact Us</a>
+      <a href="/policies/shipping-policy">Shipping &amp; Returns</a>
+      <a href="/pages/contact#faqs">FAQs</a>
+      <a href="{{ routes.account_url }}">Track Order</a>
     </div>
   </div>
-  <div class="bhama-container bhama-footer-bottom">
-    <span>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.</span>
-    <span>Curated in India</span>
+
+  <div class="container-fluid footer-circle">
+    <h3 style="color:var(--gold-soft);font-size:14px;text-transform:uppercase;">Join The Bhama Circle</h3>
+    <p>New drops, private edits and restock notes — straight to your inbox.</p>
+    {% form 'customer', id: 'FooterNewsletterForm', class: 'newsletter' %}
+      <input type="hidden" name="contact[tags]" value="newsletter">
+      <input type="email" name="contact[email]" placeholder="{% if form.posted_successfully? %}Thank you for subscribing{% else %}Enter your email{% endif %}" aria-label="Email" required>
+      <button type="submit" aria-label="Subscribe"><i class="bi bi-arrow-right"></i></button>
+    {% endform %}
+    <div class="footer-social">
+      <a href="{{ instagram_url }}" target="_blank" rel="noreferrer" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+      <a href="{{ whatsapp_url }}" target="_blank" rel="noreferrer" aria-label="WhatsApp"><i class="bi bi-whatsapp"></i></a>
+    </div>
+  </div>
+
+  <div class="container-fluid footer-bottom">
+    <span>&copy; {{ 'now' | date: '%Y' }} {{ shop.name | upcase }}. All rights reserved.</span>
+    <span><a href="/policies/privacy-policy">Privacy</a><a href="/policies/terms-of-service">Terms</a><a href="/policies/shipping-policy">Shipping</a><a href="/policies/refund-policy">Returns</a></span>
   </div>
 </footer>
 
@@ -56,7 +77,7 @@
       "type": "textarea",
       "id": "copy",
       "label": "Footer copy",
-      "default": "Contemporary and traditional fashion, thoughtfully curated for the modern woman."
+      "default": "Contemporary & traditional fashion, thoughtfully curated for the modern woman."
     }
   ]
 }

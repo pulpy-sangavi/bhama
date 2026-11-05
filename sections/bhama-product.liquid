@@ -1,148 +1,123 @@
-<section class="bhama-container bhama-product-page" data-bhama-product data-money-format="{{ shop.money_format | escape }}">
-  <script type="application/json" data-bhama-product-json>
-    {{ product | json }}
-  </script>
+{%- assign current_variant = product.selected_or_first_available_variant -%}
 
-  <div class="bhama-product-gallery">
-    <div class="bhama-product-main" data-bhama-product-gallery>
-      {% assign gallery_index = 0 %}
-      {% for media in product.media %}
-        {% if media.media_type == 'image' %}
-          {% assign image_loading = 'lazy' %}
-          {% if gallery_index == 0 %}{% assign image_loading = 'eager' %}{% endif %}
-          <img
-            class="bhama-product-image"
-            src="{{ media.preview_image | image_url: width: 1800 }}"
-            alt="{{ media.alt | default: product.title | escape }}"
-            width="{{ media.preview_image.width }}"
-            height="{{ media.preview_image.height }}"
-            loading="{{ image_loading }}"
-            data-bhama-image="{{ gallery_index }}"
-            data-media-id="{{ media.id }}"
-            {% if gallery_index > 0 %}hidden{% endif %}
-          >
-          {% assign gallery_index = gallery_index | plus: 1 %}
-        {% endif %}
-      {% else %}
-        <img src="{{ 'bhama-product-woven-vines.jpg' | asset_url }}" alt="{{ product.title | escape }}" width="1200" height="1800" class="bhama-product-image">
-      {% endfor %}
-    </div>
+<section class="section section-ivory">
+  <div class="container-fluid product-page" data-bhama-product data-money-format="{{ shop.money_format | escape }}">
+    <script type="application/json" data-bhama-product-json>
+      {{ product | json }}
+    </script>
 
-    {% if product.media.size > 1 %}
-      <div class="bhama-product-thumbs">
-        {% assign gallery_index = 0 %}
-        {% for media in product.media limit: 6 %}
-          {% if media.media_type == 'image' %}
-            <button
-              class="bhama-product-thumb{% if gallery_index == 0 %} is-active{% endif %}"
-              type="button"
-              data-bhama-thumbnail="{{ gallery_index }}"
-              aria-label="View product image {{ gallery_index | plus: 1 }}"
-              aria-pressed="{% if gallery_index == 0 %}true{% else %}false{% endif %}"
-            >
-              {{
-                media.preview_image
-                | image_url: width: 240
-                | image_tag: loading: 'lazy', alt: media.alt | default: product.title, width: 240, height: 240
-              }}
+    <div class="gallery">
+      <div class="thumbs">
+        {%- assign gallery_index = 0 -%}
+        {%- for media in product.media limit: 6 -%}
+          {%- if media.media_type == 'image' -%}
+            <button class="thumb-button{% if gallery_index == 0 %} is-active{% endif %}" type="button" data-bhama-thumbnail="{{ gallery_index }}" aria-label="View product image {{ gallery_index | plus: 1 }}" aria-pressed="{% if gallery_index == 0 %}true{% else %}false{% endif %}">
+              {{ media.preview_image | image_url: width: 500 | image_tag: loading: 'lazy', alt: media.alt | default: product.title }}
             </button>
-            {% assign gallery_index = gallery_index | plus: 1 %}
-          {% endif %}
-        {% endfor %}
+            {%- assign gallery_index = gallery_index | plus: 1 -%}
+          {%- endif -%}
+        {%- endfor -%}
       </div>
-    {% endif %}
-  </div>
-
-  <article class="bhama-product-info">
-    <div class="bhama-product-vendor-row">
-      <p class="bhama-eyebrow">{{ product.vendor | default: shop.name }}</p>
-      {% if product.selected_or_first_available_variant.available %}
-        <span class="bhama-stock-pill" data-bhama-stock>In stock</span>
-      {% else %}
-        <span class="bhama-stock-pill is-sold-out" data-bhama-stock>Sold out</span>
-      {% endif %}
+      <div class="main-product-wrap">
+        {%- assign gallery_index = 0 -%}
+        {%- for media in product.media -%}
+          {%- if media.media_type == 'image' -%}
+            <img class="main-product" src="{{ media.preview_image | image_url: width: 1400 }}" alt="{{ media.alt | default: product.title | escape }}" width="{{ media.preview_image.width }}" height="{{ media.preview_image.height }}" {% if gallery_index == 0 %}loading="eager"{% else %}loading="lazy" hidden{% endif %} data-bhama-image="{{ gallery_index }}" data-media-id="{{ media.id }}">
+            {%- assign gallery_index = gallery_index | plus: 1 -%}
+          {%- endif -%}
+        {%- else -%}
+          <img class="main-product" src="{{ 'bhama-product-woven-vines.jpg' | asset_url }}" alt="{{ product.title | escape }}">
+        {%- endfor -%}
+      </div>
     </div>
 
-    <h1>{{ product.title }}</h1>
+    <article class="product-copy">
+      <p class="eyebrow dark">{{ product.type | default: product.vendor | default: 'The Bhama Edit' }}</p>
+      <div class="rating"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i></div>
+      <h1>{{ product.title }}</h1>
+      <span class="price">
+        <span data-bhama-price>{{ current_variant.price | money }}</span>
+        <span class="old-price{% unless current_variant.compare_at_price > current_variant.price %} is-hidden{% endunless %}" data-bhama-compare>{% if current_variant.compare_at_price > current_variant.price %}{{ current_variant.compare_at_price | money }}{% endif %}</span>
+        <span class="stock-note{% unless current_variant.available %} is-sold-out{% endunless %}" data-bhama-stock>{% if current_variant.available %}In stock{% else %}Sold out{% endif %}</span>
+      </span>
+      {%- if product.description != blank -%}
+        <p>{{ product.description | strip_html | truncatewords: 40 }}</p>
+      {%- else -%}
+        <p>{{ section.settings.fallback_description }}</p>
+      {%- endif -%}
 
-    <div class="bhama-rating" aria-label="Customer favorite">
-      <span>5.0</span>
-      <strong>Customer favourite</strong>
-    </div>
+      {% form 'product', product, data-bhama-product-form: '' %}
+        <input type="hidden" name="id" value="{{ current_variant.id }}" data-bhama-variant-id>
 
-    <div class="bhama-product-price-row">
-      <p class="bhama-product-price" data-bhama-price>{{ product.selected_or_first_available_variant.price | money }}</p>
-      {% if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price %}
-        <p class="bhama-product-compare" data-bhama-compare>{{ product.selected_or_first_available_variant.compare_at_price | money }}</p>
-      {% else %}
-        <p class="bhama-product-compare is-hidden" data-bhama-compare></p>
-      {% endif %}
-    </div>
-
-    {% if product.description != blank %}
-      <div class="bhama-product-description">{{ product.description }}</div>
-    {% else %}
-      <p class="bhama-product-description">Beautifully curated for festive, traditional and everyday occasion wear.</p>
-    {% endif %}
-
-    {% form 'product', product, class: 'bhama-product-form', data-bhama-product-form: '' %}
-      <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" data-bhama-variant-id>
-
-      {% unless product.has_only_default_variant %}
-        <div class="bhama-options">
-          {% for option in product.options_with_values %}
-            <fieldset class="bhama-option-group" data-bhama-option-group data-option-position="{{ option.position }}">
-              <legend>{{ option.name }}</legend>
-              <div class="bhama-option-values">
-                {% for value in option.values %}
-                  <button
-                    type="button"
-                    class="bhama-option-value{% if option.selected_value == value %} is-active{% endif %}"
-                    data-bhama-option-value="{{ value | escape }}"
-                    aria-pressed="{% if option.selected_value == value %}true{% else %}false{% endif %}"
-                  >
-                    {{ value }}
-                  </button>
-                {% endfor %}
+        {%- unless product.has_only_default_variant -%}
+          {%- for option in product.options_with_values -%}
+            <div class="option-row" data-bhama-option-group data-option-position="{{ option.position }}">
+              <label>{{ option.name }}</label>
+              <div class="sizes">
+                {%- for value in option.values -%}
+                  <button type="button" class="{% if option.selected_value == value %}active is-active{% endif %}" data-bhama-option-value="{{ value | escape }}" aria-pressed="{% if option.selected_value == value %}true{% else %}false{% endif %}">{{ value }}</button>
+                {%- endfor -%}
               </div>
-            </fieldset>
-          {% endfor %}
-        </div>
-      {% endunless %}
+            </div>
+          {%- endfor -%}
+        {%- endunless -%}
 
-      <div class="bhama-qty-row">
-        <label class="bhama-field-label" for="BhamaQuantity-{{ section.id }}">Quantity</label>
-        <div class="bhama-qty-stepper">
-          <button type="button" data-bhama-qty-minus aria-label="Decrease quantity">-</button>
-          <input class="bhama-quantity" id="BhamaQuantity-{{ section.id }}" type="number" name="quantity" value="1" min="1" aria-label="Quantity" data-bhama-qty>
-          <button type="button" data-bhama-qty-plus aria-label="Increase quantity">+</button>
+        <div class="option-row quantity-control">
+          <label for="BhamaQuantity-{{ section.id }}">Quantity</label>
+          <select id="BhamaQuantity-{{ section.id }}" name="quantity" aria-label="Quantity" data-bhama-qty>
+            {%- for i in (1..10) -%}<option value="{{ i }}">{{ i }}</option>{%- endfor -%}
+          </select>
         </div>
+
+        <div class="buy-buttons">
+          <button class="btn btn-red" type="submit" name="add" data-bhama-add {% unless current_variant.available %}disabled{% endunless %}><span data-bhama-add-label>{% if current_variant.available %}Add to Cart{% else %}Sold Out{% endif %}</span></button>
+          <button class="btn btn-outline" type="button" data-bhama-buy-now {% unless current_variant.available %}disabled{% endunless %}>Buy Now</button>
+        </div>
+        <p class="bhama-form-message" data-bhama-form-message role="status" aria-live="polite"></p>
+      {% endform %}
+
+      <div class="pick-note">
+        <p class="pick-note-label">Why we picked it</p>
+        <p>{{ section.settings.pick_note }}</p>
       </div>
 
-      <div class="bhama-purchase-actions">
-        <button class="bhama-add" type="submit" name="add" data-bhama-add {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}>
-          <span data-bhama-add-label>{% if product.selected_or_first_available_variant.available %}Add to Cart{% else %}Sold Out{% endif %}</span>
-        </button>
-
-        <button class="bhama-buy-now" type="button" data-bhama-buy-now {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}>
-          Buy Now
-        </button>
+      <div class="accordion-list">
+        <details open><summary>Details</summary>{% if product.description != blank %}<div class="rte">{{ product.description }}</div>{% else %}<p>{{ section.settings.details }}</p>{% endif %}</details>
+        <details><summary>Shopping Policy</summary><p>{{ section.settings.policy }}</p></details>
       </div>
-
-      <p class="bhama-form-message" data-bhama-form-message role="status" aria-live="polite"></p>
-    {% endform %}
-
-    <div class="bhama-benefits">
-      <span>Free shipping on selected products</span>
-      <span>Secure checkout and prepaid support</span>
-      <span>Quality checked before dispatch</span>
-    </div>
-  </article>
+    </article>
+  </div>
 </section>
+
+{%- assign related = product.collections.first.products -%}
+{%- if related.size > 1 -%}
+  <section class="section section-black">
+    <div class="container-fluid">
+      <div class="section-head">
+        <div><p class="eyebrow">Styled to pair</p><h2>Complete The Look</h2></div>
+        <a class="btn btn-red" href="{{ routes.all_products_collection_url }}">Shop All</a>
+      </div>
+      <div class="product-grid">
+        {%- assign shown = 0 -%}
+        {%- for item in related -%}
+          {%- if item.id != product.id and shown < 4 -%}
+            {% render 'bhama-product-card', product: item, quick_label: 'View Product', stock: item.type %}
+            {%- assign shown = shown | plus: 1 -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </section>
+{%- endif -%}
 
 {% schema %}
 {
   "name": "BHAMA Product",
-  "settings": []
+  "settings": [
+    { "type": "textarea", "id": "fallback_description", "label": "Fallback description", "default": "An effortless statement piece with a traditional language and modern ease. Designed to feel Bhama, never supplier-generic." },
+    { "type": "textarea", "id": "pick_note", "label": "Why we picked it", "default": "An easy statement piece that moves effortlessly from festive dinners to evening plans — traditional detail on a modern base." },
+    { "type": "textarea", "id": "details", "label": "Fallback details", "default": "Fabric, fit and care details are listed with each piece. Country of origin: India." },
+    { "type": "textarea", "id": "policy", "label": "Shopping policy", "default": "No returns, no exchanges, and no COD. Every product is quality checked before dispatch." }
+  ]
 }
 {% endschema %}

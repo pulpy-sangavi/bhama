@@ -6,5 +6,22 @@
     "theme_author": "BHAMA",
     "theme_documentation_url": "https://help.shopify.com/",
     "theme_support_url": "https://help.shopify.com/"
+  },
+  {
+    "name": "Social",
+    "settings": [
+      {
+        "type": "text",
+        "id": "instagram_url",
+        "label": "Instagram URL",
+        "default": "https://www.instagram.com/labelbhama/"
+      },
+      {
+        "type": "text",
+        "id": "whatsapp_url",
+        "label": "WhatsApp link",
+        "default": "https://wa.me/"
+      }
+    ]
   }
 ]

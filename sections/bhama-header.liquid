@@ -1,44 +1,98 @@
-<div class="bhama-announcement">
-  <span><i class="bi bi-gem" aria-hidden="true"></i> {{ section.settings.announcement }} &nbsp;|&nbsp; <a href="{{ routes.all_products_collection_url }}">Shop now <span aria-hidden="true">→</span></a></span>
+{%- liquid
+  assign new_in_url = routes.all_products_collection_url
+  assign contemporary_url = routes.collections_url | append: '/contemporary'
+  assign traditional_url = routes.collections_url | append: '/traditional'
+  assign accessories_url = routes.collections_url | append: '/accessories'
+  assign edit_url = routes.root_url | append: '#bhama-edit'
+  assign home_url = routes.root_url
+  if routes.root_url == '/'
+    assign home_url = ''
+  endif
+-%}
+
+<div class="announcement-bar">
+  <button type="button" aria-label="Previous offer" id="announcePrev"><i class="bi bi-chevron-left"></i></button>
+  <div class="announce-track" id="announceTrack">
+    <span class="is-active"><i class="bi bi-gem"></i>{{ section.settings.announcement_1 | upcase }}&nbsp; | &nbsp;<a href="{{ new_in_url }}" style="color:inherit;text-decoration:underline;">SHOP NOW →</a></span>
+    <span><i class="bi bi-gem"></i>{{ section.settings.announcement_2 | upcase }}&nbsp; | &nbsp;<a href="{{ edit_url }}" style="color:inherit;text-decoration:underline;">DISCOVER THE BHAMA EDIT →</a></span>
+    <span><i class="bi bi-gem"></i>{{ section.settings.announcement_3 | upcase }}&nbsp; | &nbsp;<a href="{{ new_in_url }}" style="color:inherit;text-decoration:underline;">EXPLORE →</a></span>
+  </div>
+  <button type="button" aria-label="Next offer" id="announceNext"><i class="bi bi-chevron-right"></i></button>
 </div>
 
-<header class="bhama-header">
-  <div class="bhama-container bhama-nav">
-    <a class="bhama-logo" href="{{ routes.root_url }}" aria-label="{{ shop.name }}">
-      {% if section.settings.logo != blank %}
-        {{ section.settings.logo | image_url: width: 320 | image_tag: loading: 'eager', alt: shop.name, width: 150, height: 54 }}
-      {% else %}
-        <img src="{{ 'bhama-logo.png' | asset_url }}" alt="{{ shop.name }}" width="150" height="54">
-      {% endif %}
-    </a>
+<header class="site-header" id="siteHeader">
+  <nav class="navbar navbar-expand-lg main-nav">
+    <div class="container-fluid d-flex align-items-center">
+      <a class="navbar-brand logo-link" href="{{ routes.root_url }}">
+        {%- if section.settings.logo != blank -%}
+          {{ section.settings.logo | image_url: width: 320 | image_tag: loading: 'eager', alt: shop.name }}
+        {%- else -%}
+          <img src="{{ 'bhama-logo.png' | asset_url }}" alt="{{ shop.name }}">
+        {%- endif -%}
+      </a>
 
-    <ul class="bhama-menu" id="BhamaMenu-{{ section.id }}">
-      {% if section.settings.menu != blank %}
-        {% for link in section.settings.menu.links %}
-          <li><a href="{{ link.url }}">{{ link.title }}</a></li>
-        {% endfor %}
-      {% else %}
-        <li><a href="{{ routes.collections_url }}">New In</a></li>
-        <li><a href="{{ routes.collections_url }}/contemporary">Contemporary</a></li>
-        <li><a href="{{ routes.collections_url }}/traditional">Traditional</a></li>
-        <li><a href="{{ routes.collections_url }}/accessories">Accessories</a></li>
-        <li><a href="{{ routes.collections_url }}">The Bhama Edit</a></li>
-      {% endif %}
-    </ul>
+      <ul class="navbar-nav mx-auto d-none d-lg-flex flex-row">
+        {%- if section.settings.menu != blank -%}
+          {%- for link in section.settings.menu.links -%}
+            <li class="nav-item"><a class="nav-link{% if link.active or forloop.first and template.name == 'index' %} active{% endif %}" href="{{ link.url }}">{{ link.title }}</a></li>
+          {%- endfor -%}
+        {%- else -%}
+          <li class="nav-item"><a class="nav-link active" href="{{ new_in_url }}">New In</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ contemporary_url }}">Contemporary</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ traditional_url }}">Traditional</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ accessories_url }}">Accessories</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ edit_url }}">The Bhama Edit</a></li>
+        {%- endif -%}
+      </ul>
 
-    <div class="bhama-actions">
-      <form class="bhama-header-search" action="{{ routes.search_url }}" method="get" role="search">
-        <button class="bhama-search-submit" type="submit" aria-label="Search"><i class="bi bi-search" aria-hidden="true"></i></button>
-        <input type="search" name="q" placeholder="Search kurtas, dresses, sarees" aria-label="Search products">
-      </form>
-      <a class="bhama-header-icon bhama-wishlist-link" href="/pages/wishlist" aria-label="Wishlist"><i class="bi bi-heart" aria-hidden="true"></i></a>
-      <a class="bhama-header-icon" href="{{ routes.cart_url }}" aria-label="Shopping bag"><i class="bi bi-bag" aria-hidden="true"></i><span class="bhama-cart-count" data-bhama-cart-count>{{ cart.item_count }}</span></a>
-      <button class="bhama-menu-toggle" type="button" data-bhama-menu-toggle aria-controls="BhamaMenu-{{ section.id }}" aria-expanded="false" aria-label="Open menu">
-        <span></span><span></span><span></span>
-      </button>
+      <div class="nav-actions ms-lg-0 ms-auto">
+        <a class="search-pill d-none d-lg-inline-flex" href="{{ routes.search_url }}"><i class="bi bi-search"></i><span>Search kurtas, dresses, sarees</span></a>
+        <a href="{{ routes.search_url }}" aria-label="Search" class="d-lg-none"><i class="bi bi-search"></i></a>
+        <a href="/pages/wishlist" aria-label="Wishlist"><i class="bi bi-heart"></i></a>
+        <a class="icon-link" href="{{ routes.cart_url }}" aria-label="Bag"><i class="bi bi-bag"></i><span class="cart-count" data-bhama-cart-count>{{ cart.item_count }}</span></a>
+        <button class="navbar-toggler border-0 p-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu" aria-controls="mobileMenu" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<div class="offcanvas offcanvas-end mobile-menu" tabindex="-1" id="mobileMenu">
+  <div class="offcanvas-header">
+    {%- if section.settings.logo != blank -%}
+      {{ section.settings.logo | image_url: width: 320 | image_tag: loading: 'lazy', alt: shop.name }}
+    {%- else -%}
+      <img src="{{ 'bhama-logo.png' | asset_url }}" alt="{{ shop.name }}">
+    {%- endif -%}
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <div class="mobile-menu-group">
+      <h6>Shop</h6>
+      <a href="{{ new_in_url }}">New In</a>
+      <a href="{{ contemporary_url }}">Contemporary</a>
+      <a href="{{ traditional_url }}">Traditional</a>
+      <a href="{{ accessories_url }}">Accessories</a>
+      <a href="{{ edit_url }}">The Bhama Edit</a>
+      <a href="{{ routes.collections_url }}/sale">Sale</a>
+    </div>
+    <div class="mobile-menu-group">
+      <h6>Discover</h6>
+      <a href="{{ home_url }}/#mood">Shop by Mood</a>
+      <a href="{{ home_url }}/#occasion">Shop by Occasion</a>
+      <a href="{{ home_url }}/#last-few">Last Few</a>
+      <a href="{{ home_url }}/#coming-soon">Coming Soon</a>
+    </div>
+    <div class="mobile-menu-group">
+      <h6>Help</h6>
+      <a href="/pages/contact">Contact</a>
+      <a href="/pages/contact#faqs">FAQs</a>
+      <a href="/policies/shipping-policy">Shipping &amp; Returns</a>
+      <a href="{{ routes.account_url }}">Track Order</a>
     </div>
   </div>
-</header>
+</div>
 
 {% schema %}
 {
@@ -46,9 +100,21 @@
   "settings": [
     {
       "type": "text",
-      "id": "announcement",
-      "label": "Announcement",
+      "id": "announcement_1",
+      "label": "Announcement 1",
       "default": "New drops, freshly curated"
+    },
+    {
+      "type": "text",
+      "id": "announcement_2",
+      "label": "Announcement 2",
+      "default": "Limited pieces"
+    },
+    {
+      "type": "text",
+      "id": "announcement_3",
+      "label": "Announcement 3",
+      "default": "New styles added regularly"
     },
     {
       "type": "image_picker",
