@@ -138,3 +138,45 @@ $(function () {
 
 
 });
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('[data-price-range]').forEach((range) => {
+    const minRange = range.querySelector('[data-min-range]');
+    const maxRange = range.querySelector('[data-max-range]');
+    const minInput = range.querySelector('[data-min-input]');
+    const maxInput = range.querySelector('[data-max-input]');
+    const minOutput = range.querySelector('[data-min-output]');
+    const maxOutput = range.querySelector('[data-max-output]');
+    const fill = range.querySelector('[data-price-fill]');
+    if (!minRange || !maxRange || !minInput || !maxInput) return;
+
+    const update = (changed) => {
+      const step = Number(minRange.step) || 100;
+      let minimum = Number(minRange.value);
+      let maximum = Number(maxRange.value);
+      if (maximum - minimum < step) {
+        if (changed === minRange) minimum = maximum - step;
+        else maximum = minimum + step;
+      }
+
+      minimum = Math.max(Number(minRange.min), minimum);
+      maximum = Math.min(Number(maxRange.max), maximum);
+      minRange.value = minimum;
+      maxRange.value = maximum;
+      minInput.value = minimum;
+      maxInput.value = maximum;
+      if (minOutput) minOutput.value = minimum.toLocaleString('en-IN');
+      if (maxOutput) maxOutput.value = maximum.toLocaleString('en-IN');
+
+      const low = Number(minRange.min);
+      const high = Number(maxRange.max);
+      const start = ((minimum - low) / (high - low)) * 100;
+      const end = ((maximum - low) / (high - low)) * 100;
+      fill.style.left = `${start}%`;
+      fill.style.width = `${Math.max(0, end - start)}%`;
+    };
+
+    minRange.addEventListener('input', () => update(minRange));
+    maxRange.addEventListener('input', () => update(maxRange));
+    update();
+  });
+});

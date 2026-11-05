@@ -35,18 +35,11 @@
       <div class="filter-group"><strong>Shop</strong><a href="{{ all_url }}">New In</a><a href="{{ c }}/contemporary">Contemporary</a><a href="{{ c }}/traditional">Traditional</a><a href="{{ c }}/accessories">Accessories</a><a href="{{ routes.root_url }}#bhama-edit">The Bhama Edit</a><a href="{{ c }}/sale">Sale</a></div>
       <div class="filter-group"><strong>Traditional</strong><a href="{{ c }}/sarees">Sarees</a><a href="{{ c }}/kurtas">Kurtas</a><a href="{{ c }}/dupattas">Dupattas</a><a href="{{ c }}/sets">Sets</a><a href="{{ c }}/blouses">Blouses</a></div>
       <div class="filter-group"><strong>Bhama Mood</strong><a href="{{ all_url }}">Effortless</a><a href="{{ all_url }}">Statement</a><a href="{{ all_url }}">Festive</a><a href="{{ all_url }}">After Dark</a></div>
-      <details class="filter-group facet-filter price-shortcuts" open>
-        <summary>Price</summary>
-        <div class="price-shortcut-list">
-          <a href="{{ collection.url }}?filter.v.price.lte=999">Under ₹999</a>
-          <a href="{{ collection.url }}?filter.v.price.gte=1000&filter.v.price.lte=1499">₹1,000 - ₹1,499</a>
-          <a href="{{ collection.url }}?filter.v.price.gte=1500&filter.v.price.lte=2499">₹1,500 - ₹2,499</a>
-          <a href="{{ collection.url }}?filter.v.price.gte=2500">₹2,500 &amp; above</a>
-        </div>
-      </details>
       <form class="collection-filters" action="{{ collection.url }}" method="get">
         {%- for filter in collection.filters -%}
-          {%- unless filter.type == 'price_range' -%}
+          {%- if filter.type == 'price_range' -%}
+            {%- assign price_filter = filter -%}
+          {%- else -%}
             <details class="filter-group facet-filter" open>
               <summary>{{ filter.label }}</summary>
               {%- case filter.type -%}
@@ -60,8 +53,31 @@
                   {%- endfor -%}
               {%- endcase -%}
             </details>
-          {%- endunless -%}
+          {%- endif -%}
         {%- endfor -%}
+        {%- if price_filter -%}
+          <details class="filter-group facet-filter price-filter-drawer" open>
+            <summary>Price</summary>
+            <div class="price-range-scale" data-price-range>
+              <div class="price-range-values">
+                <span>₹<output data-min-output>{{ price_filter.min_value.value | default: price_filter.range_min | divided_by: 100 | round }}</output></span>
+                <span>₹<output data-max-output>{{ price_filter.max_value.value | default: price_filter.range_max | divided_by: 100 | round }}</output></span>
+              </div>
+              <div class="price-range-track">
+                <div class="price-range-fill" data-price-fill></div>
+                <input type="range" data-min-range min="{{ price_filter.range_min | divided_by: 100 | round }}" max="{{ price_filter.range_max | divided_by: 100 | round }}" value="{{ price_filter.min_value.value | default: price_filter.range_min | divided_by: 100 | round }}" step="100" aria-label="Minimum price">
+                <input type="range" data-max-range min="{{ price_filter.range_min | divided_by: 100 | round }}" max="{{ price_filter.range_max | divided_by: 100 | round }}" value="{{ price_filter.max_value.value | default: price_filter.range_max | divided_by: 100 | round }}" step="100" aria-label="Maximum price">
+              </div>
+              <input type="hidden" name="{{ price_filter.min_value.param_name }}" data-min-input value="{{ price_filter.min_value.value | divided_by: 100 | round }}">
+              <input type="hidden" name="{{ price_filter.max_value.param_name }}" data-max-input value="{{ price_filter.max_value.value | divided_by: 100 | round }}">
+              <div class="price-range-ticks">
+                <span>₹{{ price_filter.range_min | divided_by: 100 | round }}</span>
+                <span>₹{{ price_filter.range_max | divided_by: 100 | round }}</span>
+              </div>
+            </div>
+            <button type="submit" class="price-apply">Apply price</button>
+          </details>
+        {%- endif -%}
         {%- if collection.filters != blank and collection.filters.size > 0 -%}
           {%- assign clear_url = collection.url -%}
           <a class="clear-filters" href="{{ clear_url }}">Clear all filters</a>
