@@ -768,7 +768,7 @@ a {
   color: var(--bhama-muted);
 }
 
-.bhama-cart-summary {
+.bhama-cart-summary:not(.bhama-cart-panel) {
   display: flex;
   align-items: center;
   justify-content: space-between;
