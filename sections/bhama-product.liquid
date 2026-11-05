@@ -1,5 +1,19 @@
 {%- assign current_variant = product.selected_or_first_available_variant -%}
 
+<nav class="product-breadcrumb" aria-label="Breadcrumb">
+  <div class="container-fluid">
+    <a href="{{ routes.root_url }}">Home</a>
+    <span>/</span>
+    <a href="{{ routes.all_products_collection_url }}">Shop</a>
+    {%- if product.collections.first -%}
+      <span>/</span>
+      <a href="{{ product.collections.first.url }}">{{ product.collections.first.title }}</a>
+    {%- endif -%}
+    <span>/</span>
+    <span>{{ product.title }}</span>
+  </div>
+</nav>
+
 <section class="section section-ivory">
   <div class="container-fluid product-page" data-bhama-product data-money-format="{{ shop.money_format | escape }}">
     <script type="application/json" data-bhama-product-json>
@@ -19,6 +33,11 @@
         {%- endfor -%}
       </div>
       <div class="main-product-wrap">
+        {%- if current_variant.compare_at_price > current_variant.price -%}
+          <span class="main-product-badge">Sale</span>
+        {%- elsif product.tags contains 'New' -%}
+          <span class="main-product-badge">New</span>
+        {%- endif -%}
         {%- assign gallery_index = 0 -%}
         {%- for media in product.media -%}
           {%- if media.media_type == 'image' -%}
@@ -33,7 +52,10 @@
 
     <article class="product-copy">
       <p class="eyebrow dark">{{ product.type | default: product.vendor | default: 'The Bhama Edit' }}</p>
-      <div class="rating"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i></div>
+      <div class="product-rating-row">
+        <div class="rating" aria-label="4.5 out of 5 stars"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i></div>
+        <span>Verified customer favourite</span>
+      </div>
       <h1>{{ product.title }}</h1>
       <p class="product-tagline">{{ section.settings.fallback_description }}</p>
       <span class="price">
