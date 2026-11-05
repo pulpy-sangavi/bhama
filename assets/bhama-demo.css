@@ -4002,8 +4002,6 @@ h2,
 .template-product .product-page {
   grid-template-columns: minmax(0, 1.08fr) minmax(360px, .92fr);
   gap: 48px;
-  max-width: 1180px;
-  margin-inline: auto;
 }
 
 .template-product .gallery {
