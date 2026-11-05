@@ -586,7 +586,7 @@ a {
 
 .bhama-cart-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 340px;
+  grid-template-columns: minmax(0, 1fr) 380px;
   gap: 24px;
   align-items: start;
 }
@@ -627,6 +627,12 @@ a {
   display: flex;
   align-items: center;
   gap: 18px;
+}
+
+.bhama-cart-row > .bhama-cart-line-price {
+  padding-right: 2px;
+  font-family: var(--bhama-serif);
+  font-size: 17px;
 }
 
 .bhama-cart-quantity {
@@ -702,6 +708,15 @@ a {
 
 .bhama-cart-actions .bhama-btn {
   width: 100%;
+}
+
+.bhama-cart-actions .bhama-btn-outline {
+  order: 2;
+}
+
+.bhama-cart-checkout {
+  min-height: 52px;
+  font-size: 12px;
 }
 
 .bhama-cart-continue {
