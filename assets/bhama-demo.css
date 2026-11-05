@@ -29,7 +29,7 @@ body {
   background: var(--ivory);
   font-family: "Manrope", "Jost", Arial, sans-serif;
   font-size: 14px;
-  overflow-x: hidden;
+  overflow-x: clip;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -3950,6 +3950,13 @@ h2,
   background: #fff;
   padding-top: 30px;
   overflow: visible;
+}
+
+.template-product #MainContent,
+.template-product .section:has(.product-page),
+.template-product .container-fluid.product-page {
+  overflow: visible;
+  overflow-x: clip;
 }
 
 .product-breadcrumb {
