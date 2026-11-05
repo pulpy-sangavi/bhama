@@ -10,6 +10,11 @@
   assign q700 = '?auto=format&fit=crop&w=700&q=80'
   assign q500 = '?auto=format&fit=crop&w=500&q=80'
   assign q800 = '?auto=format&fit=crop&w=800&q=80'
+  assign image_meena = 'bhama-product-meena.jpg' | asset_url
+  assign image_kurthi = 'bhama-product-kurthi.jpg' | asset_url
+  assign image_gadwal = 'bhama-product-gadwal.jpg' | asset_url
+  assign image_zari = 'bhama-product-zari.jpg' | asset_url
+  assign image_vines = 'bhama-product-woven-vines.jpg' | asset_url
 -%}
 
 <!-- HERO -->
@@ -39,10 +44,10 @@
           {% render 'bhama-product-card', product: product, badge: 'New', show_compare: true %}
         {%- endfor -%}
       {%- else -%}
-        {% render 'bhama-product-card', badge: 'New', url: all_url, title: 'Botanical Printed Cotton Ethnic Set', image: 'https://images.unsplash.com/photo-1742800786544-e935375035e3?auto=format&fit=crop&w=700&q=80', price: '₹2,599', old_price: '₹3,199' %}
-        {% render 'bhama-product-card', badge: 'New', url: all_url, title: 'Vermilion Everyday Kurta', image: 'https://images.unsplash.com/photo-1759840278361-f1adc75529a1?auto=format&fit=crop&w=700&q=80', price: '₹1,799', old_price: '₹2,399' %}
-        {% render 'bhama-product-card', badge: 'New', url: all_url, title: 'Waterfront Contemporary Mini Dress', image: 'https://images.unsplash.com/photo-1764016888138-6c40577e5662?auto=format&fit=crop&w=700&q=80', price: '₹899', old_price: '₹1,199' %}
-        {% render 'bhama-product-card', badge: 'New', url: all_url, title: 'City Denim Contemporary Co-ord', image: 'https://images.unsplash.com/photo-1780757786444-fb8955c18230?auto=format&fit=crop&w=700&q=80', price: '₹899', old_price: '₹1,199' %}
+        {% render 'bhama-product-card', badge: 'New', url: all_url, title: 'Botanical Printed Cotton Ethnic Set', image: image_meena, price: '₹2,599', old_price: '₹3,199' %}
+        {% render 'bhama-product-card', badge: 'New', url: all_url, title: 'Vermilion Everyday Kurta', image: image_kurthi, price: '₹1,799', old_price: '₹2,399' %}
+        {% render 'bhama-product-card', badge: 'New', url: all_url, title: 'Waterfront Contemporary Mini Dress', image: image_gadwal, price: '₹899', old_price: '₹1,199' %}
+        {% render 'bhama-product-card', badge: 'New', url: all_url, title: 'City Denim Contemporary Co-ord', image: image_zari, price: '₹899', old_price: '₹1,199' %}
       {%- endif -%}
     </div>
   </div>
@@ -164,10 +169,10 @@
           {% render 'bhama-product-card', product: product, badge: 'Last Few', badge_class: 'last-few' %}
         {%- endfor -%}
       {%- else -%}
-        {% render 'bhama-product-card', badge: 'Last Few', badge_class: 'last-few', url: all_url, title: 'Vermilion Everyday Kurta', image: 'https://images.unsplash.com/photo-1759840278361-f1adc75529a1?auto=format&fit=crop&w=700&q=80', price: '₹1,799' %}
-        {% render 'bhama-product-card', badge: 'Last Few', badge_class: 'last-few', url: all_url, title: 'Hand-finished Saree', image: 'https://images.unsplash.com/photo-1763017707725-a9854affe474?auto=format&fit=crop&w=700&q=80', price: '₹3,499' %}
-        {% render 'bhama-product-card', badge: 'Last Few', badge_class: 'last-few', url: all_url, title: 'Botanical Printed Cotton Ethnic Set', image: 'https://images.unsplash.com/photo-1742800786544-e935375035e3?auto=format&fit=crop&w=700&q=80', price: '₹2,599' %}
-        {% render 'bhama-product-card', badge: 'Last Few', badge_class: 'last-few', url: all_url, title: 'City Denim Contemporary Co-ord', image: 'https://images.unsplash.com/photo-1780757786444-fb8955c18230?auto=format&fit=crop&w=700&q=80', price: '₹899' %}
+        {% render 'bhama-product-card', badge: 'Last Few', badge_class: 'last-few', url: all_url, title: 'Vermilion Everyday Kurta', image: image_kurthi, price: '₹1,799' %}
+        {% render 'bhama-product-card', badge: 'Last Few', badge_class: 'last-few', url: all_url, title: 'Hand-finished Saree', image: image_zari, price: '₹3,499' %}
+        {% render 'bhama-product-card', badge: 'Last Few', badge_class: 'last-few', url: all_url, title: 'Botanical Printed Cotton Ethnic Set', image: image_meena, price: '₹2,599' %}
+        {% render 'bhama-product-card', badge: 'Last Few', badge_class: 'last-few', url: all_url, title: 'City Denim Contemporary Co-ord', image: image_vines, price: '₹899' %}
       {%- endif -%}
     </div>
   </div>

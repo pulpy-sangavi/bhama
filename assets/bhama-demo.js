@@ -77,5 +77,64 @@ $(function () {
     startAnnounce();
   }
 
+  var collectionCatalog = document.querySelector("[data-collection-list]");
+  if (collectionCatalog) {
+    var collectionSection = collectionCatalog.closest("section");
+    var collectionGrid = collectionSection.querySelector(".collection-list-grid");
+    var collectionCards = Array.prototype.slice.call(collectionSection.querySelectorAll("[data-collection-card]"));
+    var collectionSearch = collectionSection.querySelector("[data-collection-search]");
+    var collectionSort = collectionSection.querySelector("[data-collection-sort]");
+    var collectionEmpty = collectionSection.querySelector("[data-collection-empty]");
+    var activeCollectionFilter = "all";
+
+    var collectionCategory = function (card) {
+      var value = ((card.dataset.collectionCategory || "") + " " + (card.dataset.collectionName || "")).toLower();
+      if (/jewel|bag|accessor|dupatta/.test(value)) return "accessories";
+      if (/dress|western|coord|co-ord|modern|contemporary/.test(value)) return "contemporary";
+      return "traditional";
+    };
+
+    var applyCollectionFilters = function () {
+      var query = (collectionSearch.value || "").trim().toLower();
+      var visibleCount = 0;
+
+      collectionCards.forEach(function (card) {
+        var name = (card.dataset.collectionName || "").toLower();
+        var categoryMatches = activeCollectionFilter === "all" || collectionCategory(card) === activeCollectionFilter;
+        var searchMatches = !query || name.indexOf(query) !== -1;
+        var visible = categoryMatches && searchMatches;
+        card.hidden = !visible;
+        if (visible) visibleCount += 1;
+      });
+
+      collectionEmpty.hidden = visibleCount !== 0;
+    };
+
+    collectionSection.querySelectorAll("[data-collection-filter]").forEach(function (button) {
+      button.addEventListener("click", function () {
+        activeCollectionFilter = button.dataset.collectionFilter;
+        collectionSection.querySelectorAll("[data-collection-filter]").forEach(function (item) {
+          item.classList.toggle("is-active", item === button);
+        });
+        applyCollectionFilters();
+      });
+    });
+
+    collectionSearch.addEventListener("input", applyCollectionFilters);
+    collectionSort.addEventListener("change", function () {
+      var cards = Array.prototype.slice.call(collectionCards);
+      cards.sort(function (a, b) {
+        if (collectionSort.value === "name") {
+          return (a.dataset.collectionName || "").localeCompare(b.dataset.collectionName || "");
+        }
+        if (collectionSort.value === "products-desc") {
+          return Number(b.dataset.collectionProducts || 0) - Number(a.dataset.collectionProducts || 0);
+        }
+        return 0;
+      });
+      cards.forEach(function (card) { collectionGrid.appendChild(card); });
+    });
+  }
+
 
 });

@@ -35,6 +35,7 @@
       <p class="eyebrow dark">{{ product.type | default: product.vendor | default: 'The Bhama Edit' }}</p>
       <div class="rating"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i></div>
       <h1>{{ product.title }}</h1>
+      <p class="product-tagline">{{ section.settings.fallback_description }}</p>
       <span class="price">
         <span data-bhama-price>{{ current_variant.price | money }}</span>
         <span class="old-price{% unless current_variant.compare_at_price > current_variant.price %} is-hidden{% endunless %}" data-bhama-compare>{% if current_variant.compare_at_price > current_variant.price %}{{ current_variant.compare_at_price | money }}{% endif %}</span>
@@ -45,6 +46,11 @@
       {%- else -%}
         <p>{{ section.settings.fallback_description }}</p>
       {%- endif -%}
+
+      <div class="product-trust">
+        <span><i class="bi bi-patch-check"></i> Quality checked</span>
+        <span><i class="bi bi-truck"></i> Secure delivery</span>
+      </div>
 
       {% form 'product', product, data-bhama-product-form: '' %}
         <input type="hidden" name="id" value="{{ current_variant.id }}" data-bhama-variant-id>

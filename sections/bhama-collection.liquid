@@ -35,6 +35,48 @@
       <div class="filter-group"><strong>Shop</strong><a href="{{ all_url }}">New In</a><a href="{{ c }}/contemporary">Contemporary</a><a href="{{ c }}/traditional">Traditional</a><a href="{{ c }}/accessories">Accessories</a><a href="{{ routes.root_url }}#bhama-edit">The Bhama Edit</a><a href="{{ c }}/sale">Sale</a></div>
       <div class="filter-group"><strong>Traditional</strong><a href="{{ c }}/sarees">Sarees</a><a href="{{ c }}/kurtas">Kurtas</a><a href="{{ c }}/dupattas">Dupattas</a><a href="{{ c }}/sets">Sets</a><a href="{{ c }}/blouses">Blouses</a></div>
       <div class="filter-group"><strong>Bhama Mood</strong><a href="{{ all_url }}">Effortless</a><a href="{{ all_url }}">Statement</a><a href="{{ all_url }}">Festive</a><a href="{{ all_url }}">After Dark</a></div>
+      <details class="filter-group facet-filter price-shortcuts" open>
+        <summary>Price</summary>
+        <div class="price-shortcut-list">
+          <a href="{{ collection.url }}?filter.v.price.lte=999">Under ₹999</a>
+          <a href="{{ collection.url }}?filter.v.price.gte=1000&filter.v.price.lte=1499">₹1,000 - ₹1,499</a>
+          <a href="{{ collection.url }}?filter.v.price.gte=1500&filter.v.price.lte=2499">₹1,500 - ₹2,499</a>
+          <a href="{{ collection.url }}?filter.v.price.gte=2500">₹2,500 &amp; above</a>
+        </div>
+      </details>
+      <form class="collection-filters" action="{{ collection.url }}" method="get">
+        {%- for filter in collection.filters -%}
+          <details class="filter-group facet-filter" open>
+            <summary>{{ filter.label }}</summary>
+            {%- case filter.type -%}
+              {%- when 'list' -%}
+                {%- for value in filter.values -%}
+                  <label class="facet-option">
+                    <input type="checkbox" name="{{ value.param_name }}" value="{{ value.value }}" {% if value.active %}checked{% endif %} onchange="this.form.submit()">
+                    <span>{{ value.label }}</span>
+                    <small>{{ value.count }}</small>
+                  </label>
+                {%- endfor -%}
+              {%- when 'price_range' -%}
+                {%- liquid
+                  assign min_value = filter.min_value.value | divided_by: 100.0
+                  assign max_value = filter.max_value.value | divided_by: 100.0
+                  assign range_min = filter.range_min | divided_by: 100.0
+                  assign range_max = filter.range_max | divided_by: 100.0
+                -%}
+                <div class="price-range">
+                  <label>Min <input name="{{ filter.min_value.param_name }}" type="number" min="{{ range_min | floor }}" max="{{ range_max | ceil }}" value="{{ min_value | default: range_min | floor }}" placeholder="{{ range_min | money_without_currency }}"></label>
+                  <label>Max <input name="{{ filter.max_value.param_name }}" type="number" min="{{ range_min | floor }}" max="{{ range_max | ceil }}" value="{{ max_value | default: range_max | ceil }}" placeholder="{{ range_max | money_without_currency }}"></label>
+                </div>
+                <button type="submit">Apply price</button>
+            {%- endcase -%}
+          </details>
+        {%- endfor -%}
+        {%- if collection.filters != blank and collection.filters.size > 0 -%}
+          {%- assign clear_url = collection.url -%}
+          <a class="clear-filters" href="{{ clear_url }}">Clear all filters</a>
+        {%- endif -%}
+      </form>
     </aside>
 
     <div>
