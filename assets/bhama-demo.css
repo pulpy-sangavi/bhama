@@ -4005,6 +4005,10 @@ h2,
 }
 
 .template-product .gallery {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 19px;
+  align-self: start;
   grid-template-columns: 68px minmax(0, 1fr);
   gap: 12px;
   align-items: start;
@@ -4306,6 +4310,10 @@ h2,
   .template-product .product-copy {
     position: static;
     padding: 24px 0 0;
+  }
+
+  .template-product .gallery {
+    position: static;
   }
 
   .template-product .main-product {
