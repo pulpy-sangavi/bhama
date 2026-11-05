@@ -1,12 +1,31 @@
 {%- liquid
   assign new_in_url = routes.all_products_collection_url
-  assign contemporary_url = routes.collections_url | append: '/contemporary'
-  assign traditional_url = routes.collections_url | append: '/traditional'
-  assign accessories_url = routes.collections_url | append: '/accessories'
+  assign contemporary_url = routes.all_products_collection_url
+  assign traditional_url = routes.all_products_collection_url
+  assign accessories_url = routes.all_products_collection_url
+  if collections.contemporary != blank and collections.contemporary.products_count > 0
+    assign contemporary_url = collections.contemporary.url
+  elsif collections['co-ord-sets'] != blank
+    assign contemporary_url = collections['co-ord-sets'].url
+  endif
+  if collections.traditional != blank and collections.traditional.products_count > 0
+    assign traditional_url = collections.traditional.url
+  elsif collections.sarees != blank
+    assign traditional_url = collections.sarees.url
+  endif
+  if collections.accessories != blank and collections.accessories.products_count > 0
+    assign accessories_url = collections.accessories.url
+  elsif collections.duppattas != blank
+    assign accessories_url = collections.duppattas.url
+  endif
   assign edit_url = routes.root_url | append: '#bhama-edit'
   assign home_url = routes.root_url
   if routes.root_url == '/'
     assign home_url = ''
+  endif
+  assign sale_url = new_in_url
+  if collections.sale != blank
+    assign sale_url = collections.sale.url
   endif
 -%}
 
@@ -48,7 +67,7 @@
       <div class="nav-actions ms-lg-0 ms-auto">
         <a class="search-pill d-none d-lg-inline-flex" href="{{ routes.search_url }}"><i class="bi bi-search"></i><span>Search kurtas, dresses, sarees</span></a>
         <a href="{{ routes.search_url }}" aria-label="Search" class="d-lg-none"><i class="bi bi-search"></i></a>
-        <a href="/pages/wishlist" aria-label="Wishlist"><i class="bi bi-heart"></i></a>
+        <a href="{{ routes.all_products_collection_url }}" aria-label="Shop favourites"><i class="bi bi-heart"></i></a>
         <a class="icon-link" href="{{ routes.cart_url }}" aria-label="Bag"><i class="bi bi-bag"></i><span class="cart-count" data-bhama-cart-count>{{ cart.item_count }}</span></a>
         <button class="navbar-toggler border-0 p-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu" aria-controls="mobileMenu" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -75,7 +94,7 @@
       <a href="{{ traditional_url }}">Traditional</a>
       <a href="{{ accessories_url }}">Accessories</a>
       <a href="{{ edit_url }}">The Bhama Edit</a>
-      <a href="{{ routes.collections_url }}/sale">Sale</a>
+      <a href="{{ sale_url }}">Sale</a>
     </div>
     <div class="mobile-menu-group">
       <h6>Discover</h6>

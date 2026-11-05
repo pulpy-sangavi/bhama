@@ -5,6 +5,22 @@
   endif
   assign instagram_url = settings.instagram_url | default: 'https://www.instagram.com/labelbhama/'
   assign whatsapp_url = settings.whatsapp_url | default: 'https://wa.me/'
+  assign contemporary_url = routes.all_products_collection_url
+  assign traditional_url = routes.all_products_collection_url
+  assign accessories_url = routes.all_products_collection_url
+  if collections.contemporary != blank and collections.contemporary.products_count > 0
+    assign contemporary_url = collections.contemporary.url
+  elsif collections['co-ord-sets'] != blank
+    assign contemporary_url = collections['co-ord-sets'].url
+  endif
+  if collections.traditional != blank and collections.traditional.products_count > 0
+    assign traditional_url = collections.traditional.url
+  elsif collections.sarees != blank
+    assign traditional_url = collections.sarees.url
+  endif
+  if collections.accessories != blank and collections.accessories.products_count > 0
+    assign accessories_url = collections.accessories.url
+  endif
 -%}
 
 <footer class="site-footer">
@@ -22,9 +38,9 @@
     <div>
       <h3>Shop</h3>
       <a href="{{ routes.all_products_collection_url }}">New In</a>
-      <a href="{{ routes.collections_url }}/contemporary">Contemporary</a>
-      <a href="{{ routes.collections_url }}/traditional">Traditional</a>
-      <a href="{{ routes.collections_url }}/accessories">Accessories</a>
+      <a href="{{ contemporary_url }}">Contemporary</a>
+      <a href="{{ traditional_url }}">Traditional</a>
+      <a href="{{ accessories_url }}">Accessories</a>
       <a href="{{ home_url }}/#bhama-edit">The Bhama Edit</a>
     </div>
     <div>
@@ -36,7 +52,7 @@
     </div>
     <div>
       <h3>Help</h3>
-      <a href="/pages/about">About Bhama</a>
+      <a href="/pages/contact">About Bhama</a>
       <a href="/pages/contact">Contact Us</a>
       <a href="/policies/shipping-policy">Shipping &amp; Returns</a>
       <a href="/pages/contact#faqs">FAQs</a>

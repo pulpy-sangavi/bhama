@@ -1,18 +1,44 @@
 {%- liquid
   assign c = routes.collections_url
   assign all_url = routes.all_products_collection_url
+  assign sarees_url = all_url
+  assign kurtas_url = all_url
+  assign dupattas_url = all_url
+  assign sets_url = all_url
+  assign blouses_url = all_url
+  assign sale_url = all_url
+  if collections.sarees != blank
+    assign sarees_url = collections.sarees.url
+  endif
+  if collections.kurthis != blank
+    assign kurtas_url = collections.kurthis.url
+  endif
+  if collections.duppattas != blank
+    assign dupattas_url = collections.duppattas.url
+  elsif collections.dupattas != blank
+    assign dupattas_url = collections.dupattas.url
+  endif
+  if collections['suit-sets'] != blank
+    assign sets_url = collections['suit-sets'].url
+  endif
+  if collections.blouses != blank
+    assign blouses_url = collections.blouses.url
+  endif
+  if collections.sale != blank
+    assign sale_url = collections.sale.url
+  endif
 -%}
 
 <div class="category-strip">
   <div class="container-fluid category-strip-inner">
     <a href="{{ all_url }}">New In</a>
-    <a href="{{ c }}/sarees">Sarees</a>
-    <a href="{{ c }}/kurtas">Kurtas</a>
-    <a href="{{ c }}/dresses">Dresses</a>
-    <a href="{{ c }}/co-ords">Co-ords</a>
-    <a href="{{ c }}/jewellery">Jewellery</a>
+    {% if collections.sarees != blank %}<a href="{{ collections.sarees.url }}">Sarees</a>{% endif %}
+    {% if collections.kurthis != blank %}<a href="{{ collections.kurthis.url }}">Kurtas</a>{% endif %}
+    {% if collections.dresses != blank %}<a href="{{ collections.dresses.url }}">Dresses</a>{% endif %}
+    {% if collections['co-ord-sets'] != blank %}<a href="{{ collections['co-ord-sets'].url }}">Co-ords</a>{% endif %}
+    {% if collections.jewellery != blank %}<a href="{{ collections.jewellery.url }}">Jewellery</a>{% endif %}
     <a href="{{ routes.root_url }}#last-few">Last Few</a>
-    <a href="{{ c }}/sale">Sale</a>
+    <a href="{{ sale_url }}">Sale</a>
   </div>
 </div>
 
@@ -37,7 +63,7 @@
       </div>
       <div class="filters-scroll">
       <div class="filter-group"><strong>Shop</strong><a href="{{ all_url }}">New In</a><a href="{{ c }}/contemporary">Contemporary</a><a href="{{ c }}/traditional">Traditional</a><a href="{{ c }}/accessories">Accessories</a><a href="{{ routes.root_url }}#bhama-edit">The Bhama Edit</a><a href="{{ c }}/sale">Sale</a></div>
-      <div class="filter-group"><strong>Traditional</strong><a href="{{ c }}/sarees">Sarees</a><a href="{{ c }}/kurtas">Kurtas</a><a href="{{ c }}/dupattas">Dupattas</a><a href="{{ c }}/sets">Sets</a><a href="{{ c }}/blouses">Blouses</a></div>
+      <div class="filter-group"><strong>Traditional</strong><a href="{{ sarees_url }}">Sarees</a><a href="{{ kurtas_url }}">Kurtas</a><a href="{{ dupattas_url }}">Dupattas</a><a href="{{ sets_url }}">Sets</a><a href="{{ blouses_url }}">Blouses</a></div>
       <div class="filter-group"><strong>Bhama Mood</strong><a href="{{ all_url }}">Effortless</a><a href="{{ all_url }}">Statement</a><a href="{{ all_url }}">Festive</a><a href="{{ all_url }}">After Dark</a></div>
       <form class="collection-filters" action="{{ collection.url }}" method="get">
         {%- for filter in collection.filters -%}
