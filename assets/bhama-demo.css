@@ -3828,7 +3828,6 @@ h2,
 .template-collection .filters {
   position: -webkit-sticky;
   position: sticky;
-  top: 112px;
   align-self: start;
   padding: 20px 20px 8px;
   border: 1px solid #ebe6de;
