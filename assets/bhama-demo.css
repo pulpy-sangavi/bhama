@@ -4056,11 +4056,6 @@ h2,
   background: var(--white);
 }
 
-.template-product .quantity-control-inline,
-.template-product .quantity-control-inline .quantity-stepper {
-  height: 48px;
-}
-
 .template-product .quantity-control-inline {
   margin-top: 0;
   padding-top: 0;
