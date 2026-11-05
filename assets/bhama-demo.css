@@ -4190,6 +4190,7 @@ h2,
 }
 
 .template-product .sizes button {
+  width: auto;
   height: 44px;
   min-width: 44px;
   border-radius: 0;
