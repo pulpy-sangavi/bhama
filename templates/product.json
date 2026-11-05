@@ -1,11 +1,44 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
       "type": "bhama-product",
+      "settings": {
+        "fallback_description": "An effortless statement piece with a traditional language and modern ease. Designed to feel Bhama, never supplier-generic.",
+        "pick_note": "An easy statement piece that moves effortlessly from festive dinners to evening plans — traditional detail on a modern base.",
+        "details": "Fabric, fit and care details are listed with each piece. Country of origin: India.",
+        "policy": "No returns, no exchanges, and no COD. Every product is quality checked before dispatch."
+      }
+    },
+    "179389002466e60f0a": {
+      "type": "apps",
+      "blocks": {
+        "judge_me_reviews_review_widget_VrC4Xf": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "review_data": "sample_data",
+            "max_width": 1200,
+            "show_shop_reviews": false,
+            "empty_state": "empty_widget"
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_review_widget_VrC4Xf"
+      ],
       "settings": {}
     }
   },
   "order": [
-    "main"
+    "main",
+    "179389002466e60f0a"
   ]
 }
