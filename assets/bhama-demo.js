@@ -155,15 +155,19 @@ document.addEventListener('DOMContentLoaded', () => {
       const reviewSection = document.querySelector('.product-review-section');
       if (reviewSection) reviewSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-      window.setTimeout(() => {
-        const appButton = document.querySelector('.spr-summary-actions-newreview, [data-jdgm-write-review]');
-        if (appButton) {
+      let attempts = 0;
+      const openReviewForm = window.setInterval(() => {
+        attempts += 1;
+        const appButton = document.querySelector('.spr-summary-actions-newreview, .spr-button-primary, [data-jdgm-write-review], .jdgm-write-rev-link');
+        if (appButton && !appButton.disabled) {
           appButton.click();
+          window.clearInterval(openReviewForm);
           return;
         }
         const reviewWidget = document.getElementById('shopify-product-reviews');
         if (reviewWidget) reviewWidget.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 350);
+        if (attempts >= 12) window.clearInterval(openReviewForm);
+      }, 250);
     });
   }
 
