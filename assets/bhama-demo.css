@@ -3827,10 +3827,40 @@ h2,
 
 .template-collection .filters {
   top: 112px;
+  max-height: calc(100vh - 132px);
   padding: 0;
   border: 0;
   box-shadow: none;
   background: transparent;
+  overflow: hidden;
+}
+
+.template-collection .filters-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 44px;
+  border-bottom: 1px solid var(--ink);
+}
+
+.template-collection .filters-scroll {
+  max-height: calc(100vh - 176px);
+  padding-right: 12px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #b9b0a3 transparent;
+}
+
+.template-collection .filters-scroll::-webkit-scrollbar {
+  width: 3px;
+}
+
+.template-collection .filters-scroll::-webkit-scrollbar-thumb {
+  background: #b9b0a3;
+}
+
+.template-collection .filter-close {
+  display: none;
 }
 
 .template-collection .filters h2 {
@@ -3858,8 +3888,10 @@ h2,
 }
 
 .template-collection .shop-toolbar {
-  min-height: 40px;
+  min-height: 48px;
   margin-bottom: 18px;
+  padding: 0 0 12px;
+  border-bottom: 1px solid var(--line);
 }
 
 .template-collection .shop-toolbar p {
@@ -3869,6 +3901,20 @@ h2,
 .template-collection .shop-toolbar select {
   height: 38px;
   min-height: 38px;
+}
+
+.template-collection .shop-toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.template-collection .filter-open {
+  display: none;
+}
+
+.template-collection .product-grid {
+  gap: 32px 18px;
 }
 
 .template-product .section:has(.product-page) {
@@ -4032,14 +4078,52 @@ h2,
 
   .template-collection .filters {
     position: static;
-    display: block;
+    position: fixed;
+    z-index: 120;
+    top: 0;
+    bottom: 0;
+    left: 0;
     max-height: none;
-    border-bottom: 1px solid var(--line);
+    width: min(88vw, 360px);
+    padding: 20px;
+    background: var(--white);
+    box-shadow: 20px 0 50px rgba(0, 0, 0, .18);
+    transform: translateX(-105%);
+    transition: transform .28s ease;
+    overflow-y: auto;
   }
 
-  .template-collection .filters > .filter-group,
-  .template-collection .collection-filters {
-    display: none;
+  .template-collection .filters.is-open {
+    transform: translateX(0);
+  }
+
+  .template-collection .filters-scroll {
+    max-height: none;
+    padding-right: 0;
+    overflow: visible;
+  }
+
+  .template-collection .filter-close {
+    display: block;
+    border: 0;
+    background: transparent;
+    color: var(--ink);
+    font-size: 28px;
+    line-height: 1;
+  }
+
+  .template-collection .filter-open {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 38px;
+    padding: 0 14px;
+    border: 1px solid var(--ink);
+    background: var(--white);
+    color: var(--ink);
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
   }
 
   .template-product .product-copy {

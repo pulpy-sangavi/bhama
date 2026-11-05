@@ -139,6 +139,17 @@ $(function () {
 
 });
 document.addEventListener('DOMContentLoaded', () => {
+  const filterPanel = document.querySelector('[data-filter-panel]');
+  const filterClose = document.querySelector('[data-filter-close]');
+  const filterOpen = document.querySelector('[data-filter-open]');
+  if (filterPanel && filterClose) {
+    const closeFilters = () => filterPanel.classList.remove('is-open');
+    filterClose.addEventListener('click', closeFilters);
+  }
+  if (filterPanel && filterOpen) {
+    filterOpen.addEventListener('click', () => filterPanel.classList.add('is-open'));
+  }
+
   document.querySelectorAll('[data-price-range]').forEach((range) => {
     const minRange = range.querySelector('[data-min-range]');
     const maxRange = range.querySelector('[data-max-range]');

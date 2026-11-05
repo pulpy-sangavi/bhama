@@ -30,8 +30,12 @@
 
 <section class="section section-ivory">
   <div class="container-fluid shop-layout">
-    <aside class="filters">
-      <h2>Filter</h2>
+    <aside class="filters" data-filter-panel>
+      <div class="filters-heading">
+        <h2>Filter</h2>
+        <button type="button" class="filter-close" data-filter-close aria-label="Close filters">&times;</button>
+      </div>
+      <div class="filters-scroll">
       <div class="filter-group"><strong>Shop</strong><a href="{{ all_url }}">New In</a><a href="{{ c }}/contemporary">Contemporary</a><a href="{{ c }}/traditional">Traditional</a><a href="{{ c }}/accessories">Accessories</a><a href="{{ routes.root_url }}#bhama-edit">The Bhama Edit</a><a href="{{ c }}/sale">Sale</a></div>
       <div class="filter-group"><strong>Traditional</strong><a href="{{ c }}/sarees">Sarees</a><a href="{{ c }}/kurtas">Kurtas</a><a href="{{ c }}/dupattas">Dupattas</a><a href="{{ c }}/sets">Sets</a><a href="{{ c }}/blouses">Blouses</a></div>
       <div class="filter-group"><strong>Bhama Mood</strong><a href="{{ all_url }}">Effortless</a><a href="{{ all_url }}">Statement</a><a href="{{ all_url }}">Festive</a><a href="{{ all_url }}">After Dark</a></div>
@@ -83,18 +87,22 @@
           <a class="clear-filters" href="{{ clear_url }}">Clear all filters</a>
         {%- endif -%}
       </form>
+      </div>
     </aside>
 
     <div>
       {% paginate collection.products by section.settings.products_per_page %}
         <div class="shop-toolbar" id="new-in">
           <p>Showing {{ collection.products_count }} product{% unless collection.products_count == 1 %}s{% endunless %} in {{ collection.title | default: 'Just Dropped' }}</p>
-          <select aria-label="Sort products" onchange="var u=new URL(window.location.href);u.searchParams.set('sort_by',this.value);window.location=u.toString();">
-            {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
-            <option value="created-descending"{% if sort_by == 'created-descending' %} selected{% endif %}>Sort by: Newest</option>
-            <option value="price-ascending"{% if sort_by == 'price-ascending' %} selected{% endif %}>Price: Low to High</option>
-            <option value="price-descending"{% if sort_by == 'price-descending' %} selected{% endif %}>Price: High to Low</option>
-          </select>
+          <div class="shop-toolbar-actions">
+            <button type="button" class="filter-open" data-filter-open>Filter products</button>
+            <select aria-label="Sort products" onchange="var u=new URL(window.location.href);u.searchParams.set('sort_by',this.value);window.location=u.toString();">
+              {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
+              <option value="created-descending"{% if sort_by == 'created-descending' %} selected{% endif %}>Sort by: Newest</option>
+              <option value="price-ascending"{% if sort_by == 'price-ascending' %} selected{% endif %}>Price: Low to High</option>
+              <option value="price-descending"{% if sort_by == 'price-descending' %} selected{% endif %}>Price: High to Low</option>
+            </select>
+          </div>
         </div>
         <div class="product-grid">
           {%- for product in collection.products -%}
