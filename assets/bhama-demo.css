@@ -4000,26 +4000,51 @@ h2,
 }
 
 .template-product .product-page {
-  grid-template-columns: minmax(520px, 1.18fr) minmax(380px, .82fr);
-  gap: 36px;
+  grid-template-columns: minmax(0, 1.08fr) minmax(360px, .92fr);
+  gap: 48px;
+  max-width: 1180px;
+  margin-inline: auto;
 }
 
 .template-product .gallery {
-  grid-template-columns: 76px 1fr;
+  grid-template-columns: 68px minmax(0, 1fr);
   gap: 12px;
+  align-items: start;
 }
 
 .template-product .main-product-wrap {
   background: #f6f5f3;
+  overflow: hidden;
 }
 
 .template-product .main-product {
   width: 100%;
   height: auto;
-  aspect-ratio: 4 / 5;
+  max-height: 680px;
   border: 0;
   object-fit: contain;
   object-position: center top;
+  display: block;
+}
+
+.template-product .thumbs {
+  grid-auto-rows: 82px;
+  gap: 8px;
+}
+
+.template-product .thumb-button {
+  width: 68px;
+  height: 82px;
+  padding: 0;
+  border: 1px solid transparent;
+  background: transparent;
+}
+
+.template-product .thumb-button img {
+  width: 68px;
+  height: 82px;
+  display: block;
+  object-fit: cover;
 }
 
 .template-product .quantity-stepper {
@@ -4178,8 +4203,8 @@ h2,
 
 .template-product .buy-buttons {
   grid-template-columns: 128px minmax(150px, 1fr) minmax(150px, 1fr);
-  align-items: end;
-  gap: 8px;
+  align-items: flex-end;
+  gap: 10px;
 }
 
 .template-product .buy-buttons .btn {
