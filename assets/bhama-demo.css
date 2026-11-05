@@ -3830,9 +3830,10 @@ h2,
   position: sticky;
   top: 112px;
   align-self: start;
-  padding: 18px;
-  border: 1px solid var(--line);
-  box-shadow: 0 10px 30px rgba(9, 8, 7, .04);
+  padding: 20px 20px 8px;
+  border: 1px solid #ebe6de;
+  border-radius: 2px;
+  box-shadow: 0 8px 24px rgba(31, 25, 18, .055);
   background: var(--white);
   overflow: visible;
 }
@@ -3841,7 +3842,8 @@ h2,
   display: flex;
   align-items: center;
   justify-content: space-between;
-  min-height: 44px;
+  min-height: 38px;
+  padding-bottom: 12px;
   border-bottom: 1px solid var(--ink);
 }
 
@@ -3855,23 +3857,58 @@ h2,
 }
 
 .template-collection .filters h2 {
-  margin-bottom: 12px;
-  font-size: 15px;
+  margin-bottom: 0;
+  font-size: 12px;
+  letter-spacing: 1.4px;
 }
 
 .template-collection .filter-group {
-  padding: 16px 0;
+  margin: 0;
+  padding: 15px 0;
+  border-top: 0;
+  border-bottom: 1px solid #eeeae3;
 }
 
 .template-collection .filter-group strong,
 .template-collection .facet-filter summary {
   color: var(--ink);
   font-size: 11px;
+  letter-spacing: .7px;
 }
 
 .template-collection .filter-group a {
   font-size: 11px;
   font-weight: 500;
+  padding: 5px 0;
+  line-height: 1.45;
+}
+
+.template-collection .collection-filters {
+  border-top: 0;
+}
+
+.template-collection .facet-filter summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 20px;
+  list-style: none;
+}
+
+.template-collection .facet-filter summary::after {
+  content: "+";
+  color: #857c70;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.template-collection .facet-filter[open] summary::after {
+  content: "-";
+}
+
+.template-collection .facet-option {
+  margin-top: 9px;
+  font-size: 11px;
 }
 
 .template-collection .collection-filters {
