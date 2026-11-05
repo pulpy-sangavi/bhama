@@ -120,7 +120,7 @@
         <p class="eyebrow dark">Loved by you</p>
         <h2>Customer Reviews</h2>
       </div>
-      <a href="#BhamaProductReviews" class="review-write-link">Write a review</a>
+      <button type="button" class="review-write-link" data-bhama-write-review>Write a review</button>
     </div>
     <div id="BhamaProductReviews" class="product-review-body">
       {%- if product.metafields.reviews.rating.value != blank and product.metafields.reviews.rating_count.value != blank -%}
@@ -133,6 +133,7 @@
         <span>Share your experience with this piece.</span>
       {%- endif -%}
     </div>
+    <div id="shopify-product-reviews" data-id="{{ product.id }}">{{ product.metafields.spr.reviews }}</div>
   </div>
 </section>
 

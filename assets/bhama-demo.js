@@ -139,6 +139,24 @@ $(function () {
 
 });
 document.addEventListener('DOMContentLoaded', () => {
+  const reviewButton = document.querySelector('[data-bhama-write-review]');
+  if (reviewButton) {
+    reviewButton.addEventListener('click', () => {
+      const reviewSection = document.querySelector('.product-review-section');
+      if (reviewSection) reviewSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      window.setTimeout(() => {
+        const appButton = document.querySelector('.spr-summary-actions-newreview, [data-jdgm-write-review]');
+        if (appButton) {
+          appButton.click();
+          return;
+        }
+        const reviewWidget = document.getElementById('shopify-product-reviews');
+        if (reviewWidget) reviewWidget.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 350);
+    });
+  }
+
   const filterPanel = document.querySelector('[data-filter-panel]');
   const filterClose = document.querySelector('[data-filter-close]');
   const filterOpen = document.querySelector('[data-filter-open]');
