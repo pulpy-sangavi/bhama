@@ -219,6 +219,12 @@ a {
   color: var(--bhama-muted);
 }
 
+.bhama-cart-page .bhama-page-hero,
+body.template-cart .bhama-page-hero {
+  padding-top: 38px;
+  padding-bottom: 22px;
+}
+
 .bhama-section-dark .bhama-eyebrow,
 .bhama-section-dark .bhama-heading h2 {
   color: #f6e5c5;
@@ -494,11 +500,12 @@ a {
 }
 
 .bhama-page-hero {
-  padding: clamp(64px, 7vw, 116px) 0 clamp(28px, 4vw, 54px);
+  padding: 44px 0 28px;
 }
 
 .bhama-page-hero h1 {
-  font-size: clamp(48px, 6vw, 86px);
+  font-size: clamp(38px, 3.5vw, 52px);
+  letter-spacing: -.015em;
 }
 
 .bhama-search-panel,
