@@ -46,31 +46,21 @@
       </details>
       <form class="collection-filters" action="{{ collection.url }}" method="get">
         {%- for filter in collection.filters -%}
-          <details class="filter-group facet-filter" open>
-            <summary>{{ filter.label }}</summary>
-            {%- case filter.type -%}
-              {%- when 'list' -%}
-                {%- for value in filter.values -%}
-                  <label class="facet-option">
-                    <input type="checkbox" name="{{ value.param_name }}" value="{{ value.value }}" {% if value.active %}checked{% endif %} onchange="this.form.submit()">
-                    <span>{{ value.label }}</span>
-                    <small>{{ value.count }}</small>
-                  </label>
-                {%- endfor -%}
-              {%- when 'price_range' -%}
-                {%- liquid
-                  assign min_value = filter.min_value.value | divided_by: 100.0
-                  assign max_value = filter.max_value.value | divided_by: 100.0
-                  assign range_min = filter.range_min | divided_by: 100.0
-                  assign range_max = filter.range_max | divided_by: 100.0
-                -%}
-                <div class="price-range">
-                  <label>Min <input name="{{ filter.min_value.param_name }}" type="number" min="{{ range_min | floor }}" max="{{ range_max | ceil }}" value="{{ min_value | default: range_min | floor }}" placeholder="{{ range_min | money_without_currency }}"></label>
-                  <label>Max <input name="{{ filter.max_value.param_name }}" type="number" min="{{ range_min | floor }}" max="{{ range_max | ceil }}" value="{{ max_value | default: range_max | ceil }}" placeholder="{{ range_max | money_without_currency }}"></label>
-                </div>
-                <button type="submit">Apply price</button>
-            {%- endcase -%}
-          </details>
+          {%- unless filter.type == 'price_range' -%}
+            <details class="filter-group facet-filter" open>
+              <summary>{{ filter.label }}</summary>
+              {%- case filter.type -%}
+                {%- when 'list' -%}
+                  {%- for value in filter.values -%}
+                    <label class="facet-option">
+                      <input type="checkbox" name="{{ value.param_name }}" value="{{ value.value }}" {% if value.active %}checked{% endif %} onchange="this.form.submit()">
+                      <span>{{ value.label }}</span>
+                      <small>{{ value.count }}</small>
+                    </label>
+                  {%- endfor -%}
+              {%- endcase -%}
+            </details>
+          {%- endunless -%}
         {%- endfor -%}
         {%- if collection.filters != blank and collection.filters.size > 0 -%}
           {%- assign clear_url = collection.url -%}
