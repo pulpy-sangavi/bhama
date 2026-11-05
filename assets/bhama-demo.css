@@ -3829,10 +3829,12 @@ h2,
   position: -webkit-sticky;
   position: sticky;
   top: 112px;
+  align-self: start;
   padding: 0;
   border: 0;
   box-shadow: none;
   background: transparent;
+  overflow: visible;
 }
 
 .template-collection .filters-heading {
@@ -3845,6 +3847,7 @@ h2,
 
 .template-collection .filters-scroll {
   padding-right: 12px;
+  overflow: visible;
 }
 
 .template-collection .filter-close {
