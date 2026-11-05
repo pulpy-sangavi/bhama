@@ -4014,10 +4014,83 @@ h2,
 }
 
 .template-product .main-product {
+  width: 100%;
   height: min(720px, 70vh);
   aspect-ratio: auto;
   border: 0;
-  object-fit: contain;
+  object-fit: cover;
+  object-position: center top;
+}
+
+.template-product .quantity-stepper {
+  width: 128px;
+  height: 44px;
+  display: grid;
+  grid-template-columns: 40px 48px 40px;
+  border: 1px solid var(--line);
+  background: var(--white);
+}
+
+.template-product .quantity-stepper button,
+.template-product .quantity-stepper input {
+  border: 0;
+  background: transparent;
+  text-align: center;
+}
+
+.template-product .quantity-stepper input {
+  width: 48px;
+  appearance: textfield;
+}
+
+.template-product .quantity-stepper input::-webkit-inner-spin-button {
+  appearance: none;
+}
+
+.template-product .quantity-stepper button {
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.product-review-section {
+  border-top: 1px solid var(--line);
+  background: var(--white);
+}
+
+.product-review-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 24px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--line);
+}
+
+.product-review-head h2 {
+  margin-bottom: 0;
+}
+
+.review-write-link {
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--ink);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+}
+
+.product-review-body {
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: var(--muted);
+}
+
+.product-review-body strong {
+  color: var(--ink);
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 22px;
 }
 
 .template-product .thumb-button,

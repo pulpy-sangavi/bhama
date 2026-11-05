@@ -87,9 +87,11 @@
 
         <div class="option-row quantity-control">
           <label for="BhamaQuantity-{{ section.id }}">Quantity</label>
-          <select id="BhamaQuantity-{{ section.id }}" name="quantity" aria-label="Quantity" data-bhama-qty>
-            {%- for i in (1..10) -%}<option value="{{ i }}">{{ i }}</option>{%- endfor -%}
-          </select>
+          <div class="quantity-stepper">
+            <button type="button" data-bhama-qty-minus aria-label="Decrease quantity">&minus;</button>
+            <input id="BhamaQuantity-{{ section.id }}" type="number" name="quantity" value="1" min="1" inputmode="numeric" aria-label="Quantity" data-bhama-qty>
+            <button type="button" data-bhama-qty-plus aria-label="Increase quantity">&plus;</button>
+          </div>
         </div>
 
         <div class="buy-buttons">
@@ -109,6 +111,29 @@
         <details><summary>Shopping Policy</summary><p>{{ section.settings.policy }}</p></details>
       </div>
     </article>
+  </div>
+</section>
+
+<section class="section product-review-section">
+  <div class="container-fluid">
+    <div class="product-review-head">
+      <div>
+        <p class="eyebrow dark">Loved by you</p>
+        <h2>Customer Reviews</h2>
+      </div>
+      <a href="#BhamaProductReviews" class="review-write-link">Write a review</a>
+    </div>
+    <div id="BhamaProductReviews" class="product-review-body">
+      {%- if product.metafields.reviews.rating.value != blank and product.metafields.reviews.rating_count.value != blank -%}
+        {% assign rating = product.metafields.reviews.rating.value | times: 1 %}
+        {% assign rating_count = product.metafields.reviews.rating_count.value | times: 1 %}
+        <strong>{{ rating | round: 1 }} / 5</strong>
+        <span>{{ rating_count }} review{% unless rating_count == 1 %}s{% endunless %}</span>
+      {%- else -%}
+        <strong>Be the first to review</strong>
+        <span>Share your experience with this piece.</span>
+      {%- endif -%}
+    </div>
   </div>
 </section>
 
